@@ -1,0 +1,102 @@
+﻿@model BookFormModel
+
+<div class="row">
+    <div class="col-sm-12 offset-lg-2 col-lg-9 offset-xl-3 col-xl-6">
+        <h4 class=" heading-margin text-center">
+            @ViewBag.Title
+        </h4>
+        <h6 class="font-weight-normal">Please, fill in the fields below in order to add your books.</h6>
+        <form method="post">
+            <div class="form-group">
+                <div class="col-sm-10">
+                    <input asp-for="Isbn" class="form-control" placeholder="* ISBN number of the book:">
+                    <p class="font-weight-light"> International Standard Book Number printed on the back cover or on the first page of the book. Enter the digits without space between them and without dashes or intervals.</p>
+                    <span asp-validation-for="Isbn" class="small text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-10">
+                    <input asp-for="Name" class="form-control" placeholder="* Name of the book:">
+                    <span asp-validation-for="Name" class="small text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-10">
+                    <input asp-for="Author" class="form-control" placeholder="* Author of the book:">
+                    <span asp-validation-for="Author" class="small text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-10">
+                    <input asp-for="ImageUrl" class="form-control" placeholder="* //TO BE MADE FOR UPLOADING AN IMAGE">
+                    <span asp-validation-for="ImageUrl" class="small text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="col-sm-2 col-form-label">Description</label>
+                <div class="col-sm-10">
+                    <textarea asp-for="Description" rows="5" class="form-control" placeholder="* Present the book with a few words and give some information about its condition..."></textarea>
+                    <span asp-validation-for="Description" class="small text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="GenreId"></label>
+                <select asp-for="GenreId" class="form-control" placeholder="* Choose the genre of the book...">
+                    @foreach (var genre in Model.Genres)
+                    {
+                        <option value="@genre.Id">@genre.Name</option>
+                    }
+                </select>
+                <span asp-validation-for="GenreId" class="small text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LanguageId"></label>
+                <select asp-for="LanguageId" class="form-control">
+                    @foreach (var language in Model.Languages)
+                    {
+                        <option value="@language.Id">@language.Name</option>
+                    }
+                </select>
+                <span asp-validation-for="LanguageId" class="small text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ConditionId"></label>
+                <select asp-for="ConditionId" class="form-control">
+                    @foreach (var condition in Model.Conditions)
+                    {
+                        <option value="@condition.Id">@condition.Name</option>
+                    }
+                </select>
+                <span asp-validation-for="ConditionId" class="small text-danger"></span>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-10">
+                    <textarea asp-for="Comment" rows="3" class="form-control" placeholder="* If condition is not 'Excellent', provide some information regarding comments on the condition of the book..."></textarea>
+                    <span asp-validation-for="Comment" class="small text-danger"></span>
+                </div>
+            </div>
+            <div class="form-check">
+                <div>
+                    Tick the box below if you would like to give the book away.
+                </div>
+                <input asp-for="IsForGiveAway" class="form-check-input position-static" type="checkbox">
+            </div>
+            <div class="form-group">
+                <p class="font-weight-light">
+                    If you would like to offer the book for sale as well as for exchange, please list the price in the field below. Offering the book for sale does not mean that it can not be exchanged.
+                </p>
+                <div class="col-sm-10">
+                    <label>
+                        <input asp-for="Price" class="col-xl-4 form-horizontal" placeholder="00.00"> BGN
+                    </label>
+                    <span asp-validation-for="Price" class="small text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-10">
+                    <button type="submit" class="btn btn-primary" value="Save">Add</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

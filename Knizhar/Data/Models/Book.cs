@@ -1,9 +1,9 @@
 ﻿namespace Knizhar.Data.Models
 {
     using System;
+    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using static DataConstants.Book;
-    using static DataConstants.Condition;
     public class Book
     {
         public int Id { get; init; }
@@ -21,7 +21,7 @@
         public string Name { get; set; }
 
         public int AuthorId { get; set; }
-        public Author Author { get; init; }
+        public Author Author { get; set; }
 
         public int GenreId { get; set; }
 
@@ -36,7 +36,7 @@
 
         [MaxLength(CommentMaxLength)]
         public string Comment { get; set; }
-        public string ImageUrl { get; init; }
+        public string ImageUrl { get; set; }
 
         [Required]
         public string Description { get; set; }
@@ -51,7 +51,7 @@
 
         public bool IsArchived { get; set; }
 
-       // public ICollection<ApplicationUser> UsersFavouriteBooks { get; init; } = new List<ApplicationUser>();
+       //public IEnumerable<ApplicationUser> UsersFavouriteBooks { get; init; } = new List<ApplicationUser>();
 
         //public ICollection<ApplicationUser> Users { get; init; } = new List<ApplicationUser>();
     }

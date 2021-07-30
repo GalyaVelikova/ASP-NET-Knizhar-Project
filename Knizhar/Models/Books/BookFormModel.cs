@@ -7,7 +7,9 @@
     using static Data.DataConstants.Book;
     using static Data.DataConstants.Author;
     using static Data.DataConstants.Condition;
-    public class AddBookFormModel
+    using Knizhar.Services.Books;
+
+    public class BookFormModel
     {
         [Required]
         [IsbnValidationAttribute]
@@ -60,11 +62,11 @@
         public decimal? Price { get; init; }
         public bool IsArchived { get; set; }
 
-        public IEnumerable<BookGenreViewModel> Genres { get; set; }
+        public IEnumerable<BookGenreServiceModel> Genres { get; set; }
 
-        public IEnumerable<BookLanguageViewModel> Languages { get; set; }
+        public IEnumerable<BookLanguageServiceModel> Languages { get; set; }
 
-        public IEnumerable<BookConditionViewModel> Conditions { get; set; }
+        public IEnumerable<BookConditionServiceModel> Conditions { get; set; }
 
     }
 }

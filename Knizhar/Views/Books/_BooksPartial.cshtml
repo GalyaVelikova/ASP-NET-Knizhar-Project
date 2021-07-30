@@ -1,0 +1,35 @@
+﻿@model IEnumerable<BookServiceModel>
+
+<div class="row">
+    @foreach (var book in Model)
+    {
+        <div class="card col-md-2 rounded ml-2 mb-2 rounded">
+            <a asp-controller="Books" asp-action="Details" asp-route-id="@book.Id">
+                <img class="card-img-top" src="@book.ImageUrl" alt="Card image cap">
+            </a>
+            <div class="card-body">
+                <p class="font-weight-light text-center">@book.Author</p>
+                <a asp-controller="Books" asp-action="Details" asp-route-id="@book.Id">
+                    <h5 class="text-uppercase text-center text-dark">@book.Name</h5>
+                </a>
+                <div class="d-flex flex-row d-flex justify-content-center">
+                    @if (book.Price != 0)
+                    {
+                        <div class="p-2">@book.TheBookIsFor</div>
+                        <h6 class="p-2 bg-light font-weight-bold text-secondary form-horizontal">@book.Price Bgn</h6>
+                    }
+                    else
+                    {
+                        <p class="font-weight-light font-weight-bold text-secondary">@book.TheBookIsFor</p>
+                    }
+                </div>
+                @if (ViewBag.AllowBookEdit == true)
+                {
+                    <a asp-controller="Books" asp-action="Edit" asp-route-id="@book.Id" class="btn btn-success btn-sm">Edit</a>
+                    <a asp-controller="Books" asp-action="Delete" asp-route-id="@book.Id" class="btn btn-warning btn-sm">Delete</a>
+
+                }
+            </div>
+        </div>
+    }
+</div>

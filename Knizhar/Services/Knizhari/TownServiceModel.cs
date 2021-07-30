@@ -1,6 +1,6 @@
-﻿namespace Knizhar.Models.Knizhari
+﻿namespace Knizhar.Services.Knizhari
 {
-    public class TownViewModel
+    public class TownServiceModel
     {
         public int Id { get; init; }
 

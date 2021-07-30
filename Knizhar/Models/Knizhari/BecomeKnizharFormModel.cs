@@ -1,5 +1,6 @@
 ﻿namespace Knizhar.Models.Knizhari
 {
+    using Knizhar.Services.Knizhari;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using static Data.DataConstants.Knizhar;
@@ -13,12 +14,12 @@
             ErrorMessage = "The username should be between {2} and {1} symbols long.")]
         public string UserName { get; init; }
 
-        [Required]
-        [StringLength(
-           TownNameMaxLength,
-           MinimumLength = TownNameMinLength,
-           ErrorMessage = "The name of the town should be between {2} and {1} symbols long.")]
-        public string Town { get; init; }
+        //[Required] TO ADD FUNCTIONALITY TO ADD NEW TOWNS TO THE TOWNS TABLE
+        //[StringLength(
+        //   TownNameMaxLength,
+        //   MinimumLength = TownNameMinLength,
+        //   ErrorMessage = "The name of the town should be between {2} and {1} symbols long.")]
+        //public string Town { get; init; }
 
         [Required]
         [Display(Name = "Town")]
@@ -26,6 +27,6 @@
 
         //Field for uploading image of the Knizhar
 
-        public IEnumerable<TownViewModel> Towns { get; set; }
+        public IEnumerable<TownServiceModel> Towns { get; set; }
     }
 }

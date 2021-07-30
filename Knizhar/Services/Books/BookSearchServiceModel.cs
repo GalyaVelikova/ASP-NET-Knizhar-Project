@@ -1,8 +1,6 @@
-﻿using Knizhar.Models.Books;
-using System.Collections.Generic;
-
-namespace Knizhar.Services.Books
+﻿namespace Knizhar.Services.Books
 {
+    using System.Collections.Generic;
     public class BookSearchServiceModel
     {
         public const int BooksPerPage = 5;

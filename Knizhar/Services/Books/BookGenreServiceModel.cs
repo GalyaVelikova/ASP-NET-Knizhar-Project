@@ -1,6 +1,6 @@
-﻿namespace Knizhar.Models.Books
+﻿namespace Knizhar.Services.Books
 {
-    public class BookConditionViewModel
+    public class BookGenreServiceModel
     {
         public int Id { get; init; }
 

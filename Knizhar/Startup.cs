@@ -5,10 +5,12 @@ namespace Knizhar
     using Knizhar.Infrastructure;
     using Knizhar.Services;
     using Knizhar.Services.Books;
+    using Knizhar.Services.Knizhari;
     using Knizhar.Services.Statistics;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Identity;
+    using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
@@ -39,11 +41,17 @@ namespace Knizhar
                 })
                 .AddEntityFrameworkStores<KnizharDbContext>();
 
+            services.AddControllersWithViews(options =>
+            {
+                options.Filters.Add<AutoValidateAntiforgeryTokenAttribute>();
+            });
+
             services
                 .AddControllersWithViews();
 
             services.AddTransient<IStatisticsService, StatisticsService>();
             services.AddTransient<IBookService, BookService>();
+            services.AddTransient<IKnizharService, KnizharService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

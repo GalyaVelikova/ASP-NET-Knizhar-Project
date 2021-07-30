@@ -60,17 +60,17 @@
               .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder
+               .Entity<Book>()
+               .HasOne(b => b.Knizhar)
+               .WithMany(k => k.Books)
+               .HasForeignKey(k => k.KnizharId)
+               .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder
                 .Entity<Knizhar>()
                 .HasOne<IdentityUser>()
                 .WithOne()
                 .HasForeignKey<Knizhar>(k => k.UserId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder
-                .Entity<Book>()
-                .HasOne<Knizhar>()
-                .WithMany(k => k.Books)
-                .HasForeignKey(k => k.KnizharId)
                 .OnDelete(DeleteBehavior.Restrict);
         }
     }

@@ -2,10 +2,42 @@
 {
     using Knizhar.Data.Models;
     using Knizhar.Models.Books;
+    using Knizhar.Services.Knizhari;
+    using System;
     using System.Collections.Generic;
 
     public interface IBookService
     {
+
+        int Create(
+                string isbn,
+                string name,
+                int genreId,
+                int languageId,
+                int conditionId,
+                string imageUrl,
+                string description,
+                string author,
+                string comment,
+                bool isForGiveAway,
+                decimal price,
+                int knizharId);
+
+        bool Edit(
+                int bookId,
+                string isbn,
+                string name,
+                int genreId,
+                int languageId,
+                int conditionId,
+                string imageUrl,
+                string description,
+                string author,
+                string comment,
+                bool isForGiveAway,
+                decimal price);
+
+        Author GetAuthor(string authorName);
         BookSearchServiceModel All(
             string genre,
             string town,
@@ -14,10 +46,18 @@
             BookSorting sorting,
             int currentPage,
             int booksPerPage);
+        BookDetailsServiceModel Details(int bookId);
+        IEnumerable<BookServiceModel> ByUser(string userId);
+        IEnumerable<BookGenreServiceModel> AllGenres();
+        IEnumerable<BookLanguageServiceModel> AllLanguages();
+        IEnumerable<BookConditionServiceModel> AllConditions();
+        IEnumerable<TownServiceModel> AllTowns();
 
-        IEnumerable<string> AllBookGenres();
-        IEnumerable<string> AllBookTowns();
-        IEnumerable<string> AllBookLanguages();
+        bool IsByKnizhar(int bookId, int knizharId);
+        bool GenreExists(int genreId);
 
+        bool LanguageExists(int languageId);
+
+        bool ConditionExists(int conditionId);
     }
 }

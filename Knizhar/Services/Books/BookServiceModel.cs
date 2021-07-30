@@ -8,7 +8,7 @@
         public string ImageUrl { get; init; }
         public string Author { get; init; }
         public string TheBookIsFor { get; set; } 
-        public decimal Price { get; set; }
+        public decimal? Price { get; set; }
 
         //public bool IsFavourite { get; set; }
 

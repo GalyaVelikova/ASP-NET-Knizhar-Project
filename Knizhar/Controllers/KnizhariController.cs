@@ -8,18 +8,25 @@
     using Microsoft.AspNetCore.Mvc;
     using System.Linq;
     using System.Collections.Generic;
+    using Knizhar.Services.Knizhari;
 
     public class KnizhariController : Controller
     {
         private readonly KnizharDbContext data;
+        private readonly IKnizharService knizhari;
 
-        public KnizhariController(KnizharDbContext data)
-            => this.data = data;
+        public KnizhariController(
+            IKnizharService knizhari,
+            KnizharDbContext data)
+        {
+            this.knizhari = knizhari;
+            this.data = data;
+        }
 
         [Authorize]
         public IActionResult Create() => View(new BecomeKnizharFormModel
         {
-            Towns = this.GetTowns(),
+            Towns = this.knizhari.AllTowns(),
         });
 
         [HttpPost]
@@ -43,21 +50,21 @@
                 return View(knizhar);
             }
 
-            var town = data.Towns.FirstOrDefault(t => t.Name == knizhar.Town);
+            //var town = data.Towns.FirstOrDefault(t => t.Name == knizhar.Town);
 
-            if (town == null)
-            {
-                town = new Town { Name = knizhar.Town };
+            //if (town == null)
+            //{
+            //    town = new Town { Name = knizhar.Town };
                 
-                this.data.Towns.Add(town);
+            //    this.data.Towns.Add(town);
 
-                this.data.SaveChanges();
-            }
+            //    this.data.SaveChanges();
+            //}
 
             var knizharData = new Knizhar
             {
                 UserName = knizhar.UserName,
-                TownId = town.Id,
+                TownId = knizhar.TownId,
                 UserId = userId,
             };
 
@@ -67,15 +74,5 @@
 
             return RedirectToAction("All", "Books");
         }
-
-        private IEnumerable<TownViewModel> GetTowns()
-         => this.data
-                .Towns
-                .Select(b => new TownViewModel
-                {
-                    Id = b.Id,
-                    Name = b.Name,
-                })
-                .ToList();
     }
 }

@@ -5,6 +5,7 @@
     using Knizhar.Infrastructure;
     using Knizhar.Models.Books;
     using Knizhar.Services.Books;
+    using Knizhar.Services.Knizhari;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using System;
@@ -13,105 +14,89 @@
     public class BooksController : Controller
     {
         private readonly IBookService books;
+        private readonly IKnizharService knizhari;
         private readonly KnizharDbContext data;
 
         public BooksController(
             KnizharDbContext data,
+            IKnizharService knizhari,
             IBookService books)
         {
             this.data = data;
             this.books = books;
+            this.knizhari = knizhari;
         }
 
         [Authorize]
         public IActionResult Add()
         {
-            if (!this.UserIsKnizhar())
+            if (!this.knizhari.IsKnizhar(this.User.GetId()))
             {
                 return RedirectToAction(nameof(KnizhariController.Create), "Knizhari");
             }
 
-            return View(new AddBookFormModel
+            return View(new BookFormModel
             {
-                Genres = this.GetBookGenres(),
-                Languages = this.GetBookLanguages(),
-                Conditions = this.GetBookConditions(),
+                Genres = this.books.AllGenres(),
+                Languages = this.books.AllLanguages(),
+                Conditions = this.books.AllConditions(),
             });
         }
 
         [HttpPost]
         [Authorize]
-        public IActionResult Add(AddBookFormModel book)
+        public IActionResult Add(BookFormModel book)
         {
-            var knizharId = this.data
-                .Knizhari
-                .Where(k => k.UserId == this.User.GetId())
-                .Select(k => k.Id)
-                .FirstOrDefault();
+            var knizharId = this.knizhari.IdByUser(this.User.GetId());
 
             if (knizharId == 0)
             {
                 return RedirectToAction(nameof(KnizhariController.Create), "Knizhari");
             }
 
-            if (!this.data.Genres.Any(g => g.Id == book.GenreId))
+            if (!this.books.GenreExists(book.GenreId))
             {
                 this.ModelState.AddModelError(nameof(book.GenreId), "Genre does not exist");
             }
 
-            if (!this.data.Languages.Any(l => l.Id == book.LanguageId))
+            if (!this.books.LanguageExists(book.LanguageId))
             {
                 this.ModelState.AddModelError(nameof(book.LanguageId), "Language does not exist");
             }
 
-            if (!this.data.Conditions.Any(c => c.Id == book.ConditionId))
+            if (!this.books.ConditionExists(book.ConditionId))
             {
                 this.ModelState.AddModelError(nameof(book.ConditionId), "Pleaese choose condition from the drop down menu.");
             }
 
             if (!ModelState.IsValid)
             {
-                book.Genres = this.GetBookGenres();
-                book.Languages = this.GetBookLanguages();
-                book.Conditions = this.GetBookConditions();
+                book.Genres = this.books.AllGenres();
+                book.Languages = this.books.AllLanguages();
+                book.Conditions = this.books.AllConditions();
 
                 return View(book);
             }
 
-            var author = data.Authors.FirstOrDefault(a => a.Name == book.Author);
-            if (author == null)
-            {
-                author = new Author { Name = book.Author };
-                this.data.Authors.Add(author);
+            var author = this.books.GetAuthor(book.Author);
 
-                this.data.SaveChanges();
-            }
-
-            var bookData = new Book
-            {
-                Isbn = book.Isbn,
-                Name = book.Name,
-                GenreId = book.GenreId,
-                LanguageId = book.LanguageId,
-                ConditionId = book.ConditionId,
-                ImageUrl = book.ImageUrl,
-                Description = book.Description,
-                Author = author,
-                IsForGiveAway = book.IsForGiveAway,
-                Price = book.Price == null ? 00.00m : book.Price,
-                AddedOn = DateTime.UtcNow,
-                Favourite = false,
-                IsArchived = false,
-                KnizharId = knizharId,
-            };
-
-            this.data.Books.Add(bookData);
-
-            this.data.SaveChanges();
+            this.books.Create(
+                book.Isbn,
+                book.Name,
+                book.GenreId,
+                book.LanguageId,
+                book.ConditionId,
+                book.Comment,
+                book.ImageUrl,
+                book.Description,
+                book.Author,
+                book.IsForGiveAway,
+                (decimal)book.Price,
+                knizharId);
+            
 
             return RedirectToAction(nameof(All));
         }
-
         public IActionResult All([FromQuery]BookSearchViewModel search)
         {
 
@@ -124,53 +109,120 @@
                 search.CurrentPage,
                 BookSearchViewModel.BooksPerPage);
 
-            var bookGenres = this.books.AllBookGenres();
-            var bookTowns = this.books.AllBookTowns();
-            var bookLanguages = this.books.AllBookLanguages();
+            var bookGenres = this.books.AllGenres();
+            var bookTowns = this.books.AllTowns();
+            var bookLanguages = this.books.AllLanguages();
 
-            search.Genres = bookGenres;
-            search.Languages = bookLanguages;
-            search.Towns = bookTowns;
+            search.Genres = bookGenres.Select(g => g.Name);
+            search.Languages = bookLanguages.Select(l => l.Name);
+            search.Towns = bookTowns.Select(t => t.Name);
             search.TotalBooks = searchResult.TotalBooks;
             search.Books = searchResult.Books;
 
             return View(search);
         }
-        private IEnumerable<BookGenreViewModel> GetBookGenres()
-         => this.data
-                .Genres
-                .Select(b => new BookGenreViewModel
-                {
-                    Id = b.Id,
-                    Name = b.Name,
-                })
-                .ToList();
 
-        private IEnumerable<BookLanguageViewModel> GetBookLanguages()
-            => this.data
-                .Languages
-                .Select(l => new BookLanguageViewModel
-                {
-                    Id = l.Id,
-                    Name = l.LanguageName,
-                })
-                .ToList();
+        [Authorize]
+        public IActionResult MyBooks()
+        {
+            var myBooks = this.books.ByUser(this.User.GetId());
 
-        private IEnumerable<BookConditionViewModel> GetBookConditions()
-         => this.data
-                .Conditions
-                .Select(b => new BookConditionViewModel
-                {
-                    Id = b.Id,
-                    Name = b.ConditionName,
-                })
-                .ToList();
+            return View(myBooks);
+        }
 
-        private bool UserIsKnizhar()
-            =>this.data
-                .Knizhari
-                .Any(k => k.UserId == this.User.GetId());
-      
+        [Authorize]
+        public IActionResult Edit(int id)
+        {
+            var userId = this.User.GetId();
 
+            if (!this.knizhari.IsKnizhar(this.User.GetId()))
+            {
+                return RedirectToAction(nameof(KnizhariController.Create), "Knizhari");
+            }
+
+            var book = this.books.Details(id);
+
+            if (book.UserId != userId)
+            {
+                return Unauthorized();
+            }
+
+            return View(new BookFormModel
+            {
+                Isbn = book.Isbn,
+                Name = book.Name,
+                Author = book.Author,
+                GenreId = book.GenreId,
+                LanguageId = book.LanguageId,
+                ConditionId = book.ConditioId,
+                Comment = book.Comment,
+                ImageUrl = book.ImageUrl,
+                Description = book.Description,
+                IsForGiveAway = book.IsForGiveAway,
+                Price = book.Price,
+                Genres = this.books.AllGenres(),
+                Languages = this.books.AllLanguages(),
+                Conditions = this.books.AllConditions(),
+            });
+        }
+
+
+        [HttpPost]
+        [Authorize]
+        public IActionResult Edit(int id, BookFormModel book)
+        {
+            var knizharId = this.knizhari.IdByUser(this.User.GetId());
+
+            if (knizharId == 0)
+            {
+                return RedirectToAction(nameof(KnizhariController.Create), "Knizhari");
+            }
+
+            if (!this.books.GenreExists(book.GenreId))
+            {
+                this.ModelState.AddModelError(nameof(book.GenreId), "Genre does not exist");
+            }
+
+            if (!this.books.LanguageExists(book.LanguageId))
+            {
+                this.ModelState.AddModelError(nameof(book.LanguageId), "Language does not exist");
+            }
+
+            if (!this.books.ConditionExists(book.ConditionId))
+            {
+                this.ModelState.AddModelError(nameof(book.ConditionId), "Pleaese choose condition from the drop down menu.");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                book.Genres = this.books.AllGenres();
+                book.Languages = this.books.AllLanguages();
+                book.Conditions = this.books.AllConditions();
+
+                return View(book);
+            }
+
+            if (!this.books.IsByKnizhar(id, knizharId))
+            {
+                return BadRequest();
+            }
+            var author = this.books.GetAuthor(book.Author);
+
+            this.books.Edit(
+                id,
+                book.Isbn,
+                book.Name,
+                book.GenreId,
+                book.LanguageId,
+                book.ConditionId,
+                book.ImageUrl,
+                book.Description,
+                book.Author,
+                book.Comment,
+                book.IsForGiveAway,
+                (decimal)book.Price);
+
+            return RedirectToAction(nameof(All));
+        }
     }
 }
