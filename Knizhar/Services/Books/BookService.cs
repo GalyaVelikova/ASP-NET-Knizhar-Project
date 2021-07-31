@@ -69,7 +69,7 @@
             var totalBooks = booksQuery.Count();
 
             var books = GetBooks(booksQuery
-                .Skip((currentPage-1) * booksPerPage)
+                .Skip((currentPage - 1) * booksPerPage)
                 .Take(booksPerPage));
 
             return new BookSearchServiceModel

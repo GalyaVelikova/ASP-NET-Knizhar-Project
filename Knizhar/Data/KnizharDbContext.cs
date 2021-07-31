@@ -1,10 +1,9 @@
 ﻿namespace Knizhar.Data
 {
     using Knizhar.Data.Models;
-    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;
-    public class KnizharDbContext : IdentityDbContext
+    public class KnizharDbContext : IdentityDbContext<User>
     {
         public KnizharDbContext(DbContextOptions<KnizharDbContext> options)
             : base(options)
@@ -68,7 +67,7 @@
 
             modelBuilder
                 .Entity<Knizhar>()
-                .HasOne<IdentityUser>()
+                .HasOne<User>()
                 .WithOne()
                 .HasForeignKey<Knizhar>(k => k.UserId)
                 .OnDelete(DeleteBehavior.Restrict);

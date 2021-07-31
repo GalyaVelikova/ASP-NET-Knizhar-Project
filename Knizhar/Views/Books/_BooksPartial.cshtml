@@ -23,7 +23,7 @@
                         <p class="font-weight-light font-weight-bold text-secondary">@book.TheBookIsFor</p>
                     }
                 </div>
-                @if (ViewBag.AllowBookEdit == true)
+                @if (ViewBag.AllowBookEdit == true || User.IsAdmin())
                 {
                     <a asp-controller="Books" asp-action="Edit" asp-route-id="@book.Id" class="btn btn-success btn-sm">Edit</a>
                     <a asp-controller="Books" asp-action="Delete" asp-route-id="@book.Id" class="btn btn-warning btn-sm">Delete</a>

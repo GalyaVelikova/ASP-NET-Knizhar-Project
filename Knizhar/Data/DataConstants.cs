@@ -2,6 +2,14 @@
 {
     public class DataConstants
     {
+        public class User
+        {
+            public const int FullNameMaxLength = 40;
+            public const int FullNameMinLength = 2;
+
+            public const int PasswordMaxLength = 100;
+            public const int PasswordMinLength = 6;
+        }
         public class Book
         {
             public const string IsbnRegularExpression13Digits = @"[1-9]{13}";

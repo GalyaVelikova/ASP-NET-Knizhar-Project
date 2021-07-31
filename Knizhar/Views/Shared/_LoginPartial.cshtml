@@ -1,23 +1,25 @@
-﻿@using Microsoft.AspNetCore.Identity
+﻿@using Knizhar.Data.Models
+@using Microsoft.AspNetCore.Identity
 @using Knizhar.Services.Knizhari
 
-@inject SignInManager<IdentityUser> SignInManager
-@inject UserManager<IdentityUser> UserManager
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
 @inject IKnizharService Knizhari
 
 <ul class="navbar-nav">
     @if (SignInManager.IsSignedIn(User))
     {
-            var userId = User.GetId();
-            var userIsKnizhar = Knizhari.IsKnizhar(userId);
+        var userId = User.Id();
+        var userIsKnizhar = Knizhari.IsKnizhar(userId);
+        var userIsAdmin = User.IsAdmin();
 
-        @if (userIsKnizhar)
+        @if (userIsKnizhar && !userIsAdmin)
         {
             <li class="nav-item">
                 <a class="nav-link text-dark" asp-area="" asp-controller="Books" asp-action="MyBooks">My Books</a>
             </li>
         }
-        else
+        else if(!userIsAdmin)
         {
             <li class="nav-item">
                 <a class="nav-link text-dark" asp-area="" asp-controller="Knizhari" asp-action="Create">Become a Knizhar</a>

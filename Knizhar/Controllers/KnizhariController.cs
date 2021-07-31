@@ -34,7 +34,7 @@
 
         public IActionResult Create(BecomeKnizharFormModel knizhar)
         {
-            var userId = this.User.GetId();
+            var userId = this.User.Id();
 
             var userIsKnizhar = this.data
                 .Knizhari
@@ -55,7 +55,7 @@
             //if (town == null)
             //{
             //    town = new Town { Name = knizhar.Town };
-                
+
             //    this.data.Towns.Add(town);
 
             //    this.data.SaveChanges();

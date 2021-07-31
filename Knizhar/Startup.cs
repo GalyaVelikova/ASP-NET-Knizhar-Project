@@ -2,6 +2,7 @@ namespace Knizhar
 {
 
     using Knizhar.Data;
+    using Knizhar.Data.Models;
     using Knizhar.Infrastructure;
     using Knizhar.Services;
     using Knizhar.Services.Books;
@@ -32,13 +33,14 @@ namespace Knizhar
             services.AddDatabaseDeveloperPageExceptionFilter();
 
             services
-                .AddDefaultIdentity<IdentityUser>(options =>
+                .AddDefaultIdentity<User>(options =>
                 {
                     options.Password.RequireDigit = false;
                     options.Password.RequireLowercase = false;
                     options.Password.RequireNonAlphanumeric = false;
                     options.Password.RequireUppercase = false;
                 })
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<KnizharDbContext>();
 
             services.AddControllersWithViews(options =>

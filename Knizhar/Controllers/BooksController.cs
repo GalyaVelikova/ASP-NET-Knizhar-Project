@@ -1,28 +1,21 @@
 ﻿namespace Knizhar.Controllers
 {
-    using Knizhar.Data;
-    using Knizhar.Data.Models;
     using Knizhar.Infrastructure;
     using Knizhar.Models.Books;
     using Knizhar.Services.Books;
     using Knizhar.Services.Knizhari;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
-    using System;
-    using System.Collections.Generic;
     using System.Linq;
     public class BooksController : Controller
     {
         private readonly IBookService books;
         private readonly IKnizharService knizhari;
-        private readonly KnizharDbContext data;
 
         public BooksController(
-            KnizharDbContext data,
             IKnizharService knizhari,
             IBookService books)
         {
-            this.data = data;
             this.books = books;
             this.knizhari = knizhari;
         }
@@ -30,7 +23,7 @@
         [Authorize]
         public IActionResult Add()
         {
-            if (!this.knizhari.IsKnizhar(this.User.GetId()))
+            if (!this.knizhari.IsKnizhar(this.User.Id()))
             {
                 return RedirectToAction(nameof(KnizhariController.Create), "Knizhari");
             }
@@ -47,7 +40,7 @@
         [Authorize]
         public IActionResult Add(BookFormModel book)
         {
-            var knizharId = this.knizhari.IdByUser(this.User.GetId());
+            var knizharId = this.knizhari.IdByUser(this.User.Id());
 
             if (knizharId == 0)
             {
@@ -93,11 +86,11 @@
                 book.IsForGiveAway,
                 (decimal)book.Price,
                 knizharId);
-            
+
 
             return RedirectToAction(nameof(All));
         }
-        public IActionResult All([FromQuery]BookSearchViewModel search)
+        public IActionResult All([FromQuery] BookSearchViewModel search)
         {
 
             var searchResult = this.books.All(
@@ -125,7 +118,7 @@
         [Authorize]
         public IActionResult MyBooks()
         {
-            var myBooks = this.books.ByUser(this.User.GetId());
+            var myBooks = this.books.ByUser(this.User.Id());
 
             return View(myBooks);
         }
@@ -133,16 +126,16 @@
         [Authorize]
         public IActionResult Edit(int id)
         {
-            var userId = this.User.GetId();
+            var userId = this.User.Id();
 
-            if (!this.knizhari.IsKnizhar(this.User.GetId()))
+            if (!this.knizhari.IsKnizhar(userId) && !User.IsAdmin())
             {
                 return RedirectToAction(nameof(KnizhariController.Create), "Knizhari");
             }
 
             var book = this.books.Details(id);
 
-            if (book.UserId != userId)
+            if (book.UserId != userId && !User.IsAdmin())
             {
                 return Unauthorized();
             }
@@ -171,9 +164,9 @@
         [Authorize]
         public IActionResult Edit(int id, BookFormModel book)
         {
-            var knizharId = this.knizhari.IdByUser(this.User.GetId());
+            var knizharId = this.knizhari.IdByUser(this.User.Id());
 
-            if (knizharId == 0)
+            if (knizharId == 0 && !User.IsAdmin())
             {
                 return RedirectToAction(nameof(KnizhariController.Create), "Knizhari");
             }
@@ -202,7 +195,7 @@
                 return View(book);
             }
 
-            if (!this.books.IsByKnizhar(id, knizharId))
+            if (!this.books.IsByKnizhar(id, knizharId) && !User.IsAdmin())
             {
                 return BadRequest();
             }
