@@ -1,5 +1,6 @@
 ﻿namespace Knizhar.Controllers
 {
+    using AutoMapper;
     using Knizhar.Infrastructure;
     using Knizhar.Models.Books;
     using Knizhar.Services.Books;
@@ -11,13 +12,16 @@
     {
         private readonly IBookService books;
         private readonly IKnizharService knizhari;
+        private readonly IMapper mapper;
 
         public BooksController(
             IKnizharService knizhari,
-            IBookService books)
+            IBookService books,
+            IMapper mapper)
         {
             this.books = books;
             this.knizhari = knizhari;
+            this.mapper = mapper;
         }
 
         [Authorize]
@@ -140,23 +144,14 @@
                 return Unauthorized();
             }
 
-            return View(new BookFormModel
-            {
-                Isbn = book.Isbn,
-                Name = book.Name,
-                Author = book.AuthorName,
-                GenreId = book.GenreId,
-                LanguageId = book.LanguageId,
-                ConditionId = book.ConditioId,
-                Comment = book.Comment,
-                ImageUrl = book.ImageUrl,
-                Description = book.Description,
-                IsForGiveAway = book.IsForGiveAway,
-                Price = book.Price,
-                Genres = this.books.AllGenres(),
-                Languages = this.books.AllLanguages(),
-                Conditions = this.books.AllConditions(),
-            });
+            var bookForm = this.mapper.Map<BookFormModel>(book);
+
+            bookForm.Genres = this.books.AllGenres();
+            bookForm.Languages = this.books.AllLanguages();
+            bookForm.Conditions = this.books.AllConditions();
+            bookForm.Author = book.AuthorName;
+
+            return View(bookForm);
         }
 
 

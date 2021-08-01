@@ -1,8 +1,12 @@
 ﻿namespace Knizhar.Services.Books
 {
+    using AutoMapper;
+    using AutoMapper.QueryableExtensions;
     using Knizhar.Data;
     using Knizhar.Data.Models;
     using Knizhar.Models.Books;
+    using Knizhar.Models.Books.Models;
+    using Knizhar.Services.Books.Models;
     using Knizhar.Services.Knizhari;
     using System;
     using System.Collections.Generic;
@@ -11,10 +15,14 @@
     public class BookService : IBookService
     {
         private readonly KnizharDbContext data;
+        private readonly IConfigurationProvider mapper;
 
-        public BookService(KnizharDbContext data)
+        public BookService(
+            KnizharDbContext data,
+            IMapper mapper)
         {
             this.data = data;
+            this.mapper = mapper.ConfigurationProvider;
         }
 
         public BookSearchServiceModel All(
@@ -145,24 +153,25 @@
             => this.data
                 .Books
                 .Where(b => b.Id == id)
-                .Select(b => new BookDetailsServiceModel
-                {
-                    Name = b.Name,
-                    ImageUrl = b.ImageUrl,
-                    AuthorName = b.Author.Name,
-                    Isbn = b.Isbn,
-                    Language = b.Language.LanguageName,
-                    Genre = b.Genre.Name,
-                    Description = b.Description,
-                    Condition = b.Condition.ConditionName,
-                    Comment = b.Comment,
-                    IsForGiveAway = b.IsForGiveAway,
-                    Price = b.Price == 0 ? 00.00m : b.Price,
-                    KnizharId = b.KnizharId,
-                    KnizharName = b.Knizhar.UserName,
-                    UserId = b.Knizhar.UserId
+                .ProjectTo<BookDetailsServiceModel>(this.mapper)
+                //.Select(b => new BookDetailsServiceModel
+                //{
+                //    Name = b.Name,
+                //    ImageUrl = b.ImageUrl,
+                //    AuthorName = b.Author.Name,
+                //    Isbn = b.Isbn,
+                //    Language = b.Language.LanguageName,
+                //    Genre = b.Genre.Name,
+                //    Description = b.Description,
+                //    Condition = b.Condition.ConditionName,
+                //    Comment = b.Comment,
+                //    IsForGiveAway = b.IsForGiveAway,
+                //    Price = b.Price == 0 ? 00.00m : b.Price,
+                //    KnizharId = b.KnizharId,
+                //    KnizharName = b.Knizhar.UserName,
+                //    UserId = b.Knizhar.UserId
 
-                })
+                //})
                 .FirstOrDefault();
 
         public bool GenreExists(int genreId)

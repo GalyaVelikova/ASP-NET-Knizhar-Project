@@ -1,8 +1,7 @@
-﻿using Knizhar.Services.Books;
-using System.Collections.Generic;
-
-namespace Knizhar.Models.Books
+﻿namespace Knizhar.Models.Books.Models
 {
+    using Knizhar.Services.Books.Models;
+    using System.Collections.Generic;
     public class BookDetailsServiceModel
     {
         public int Id { get; init; }

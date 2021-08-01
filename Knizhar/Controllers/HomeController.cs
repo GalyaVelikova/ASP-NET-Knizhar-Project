@@ -1,12 +1,13 @@
 ﻿namespace Knizhar.Controllers
 {
+    using AutoMapper;
+    using AutoMapper.QueryableExtensions;
     using Knizhar.Data;
     using Knizhar.Data.Models;
     using Knizhar.Models;
-    using Knizhar.Models.Books;
     using Knizhar.Models.Home;
     using Knizhar.Services;
-    using Knizhar.Services.Books;
+    using Knizhar.Services.Books.Models;
     using Microsoft.AspNetCore.Mvc;
     using System.Diagnostics;
     using System.Linq;
@@ -15,13 +16,16 @@
     {
         private readonly IStatisticsService statistics;
         private readonly KnizharDbContext data;
+        private readonly IMapper mapper;
 
         public HomeController(
             IStatisticsService statistics,
-            KnizharDbContext data)
+            KnizharDbContext data,
+            IMapper mapper)
         {
             this.statistics = statistics;
             this.data = data;
+            this.mapper = mapper;
         }
 
         public IActionResult Index(BookServiceModel bookModel)
@@ -29,15 +33,7 @@
             var booksOrderedByDateAdded = this.data.Books.OrderByDescending(b => b.AddedOn).AsQueryable();
             
                 var newlyAddedBooks = booksOrderedByDateAdded
-                .Select(b => new BookServiceModel
-                {
-                    Id = b.Id,
-                    Name = b.Name,
-                    ImageUrl = b.ImageUrl,
-                    Author = b.Author.Name,
-                    TheBookIsFor = TheBookIsFor(bookModel, b),
-                    Price = (decimal)b.Price,
-                })
+                .ProjectTo<BookServiceModel>(this.mapper.ConfigurationProvider)
                 .Take(16)
                 .ToList();
 

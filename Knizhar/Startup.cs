@@ -43,6 +43,8 @@ namespace Knizhar
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<KnizharDbContext>();
 
+            services.AddAutoMapper(typeof(Startup));
+
             services.AddControllersWithViews(options =>
             {
                 options.Filters.Add<AutoValidateAntiforgeryTokenAttribute>();
@@ -78,10 +80,8 @@ namespace Knizhar
                 .UseAuthorization()
                 .UseEndpoints(endpoints =>
                 {
-                    endpoints.MapControllerRoute(
-                        name: "Areas",
-                        pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
 
+                    endpoints.MapDefaultAreaRoute();
                     endpoints.MapDefaultControllerRoute();
                     endpoints.MapRazorPages();
                 });

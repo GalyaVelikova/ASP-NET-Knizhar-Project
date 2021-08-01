@@ -1,4 +1,4 @@
-﻿namespace Knizhar.Services.Books
+﻿namespace Knizhar.Services.Books.Models
 {
     using System.Collections.Generic;
     public class BookSearchServiceModel

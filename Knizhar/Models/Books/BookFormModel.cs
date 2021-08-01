@@ -3,11 +3,10 @@
     using Knizhar.Attributes;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
-    using System.Text.RegularExpressions;
     using static Data.DataConstants.Book;
     using static Data.DataConstants.Author;
     using static Data.DataConstants.Condition;
-    using Knizhar.Services.Books;
+    using Knizhar.Services.Books.Models;
 
     public class BookFormModel
     {
@@ -27,7 +26,7 @@
             AuthorNameMaxLength, 
             MinimumLength = AuthorNameMinLength, 
             ErrorMessage = "The name of the author should be between {2} and {1} symbols long.")]
-        public string Author { get; init; }
+        public string Author { get; set; }
 
         [Required]
         [Display(Name = "Genre")]

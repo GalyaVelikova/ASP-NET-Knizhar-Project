@@ -2,8 +2,9 @@
 {
     using Knizhar.Data.Models;
     using Knizhar.Models.Books;
+    using Knizhar.Models.Books.Models;
+    using Knizhar.Services.Books.Models;
     using Knizhar.Services.Knizhari;
-    using System;
     using System.Collections.Generic;
 
     public interface IBookService

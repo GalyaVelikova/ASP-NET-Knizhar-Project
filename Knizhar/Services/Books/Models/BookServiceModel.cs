@@ -1,4 +1,4 @@
-﻿namespace Knizhar.Services.Books
+﻿namespace Knizhar.Services.Books.Models
 {
     public class BookServiceModel
     {

@@ -1,6 +1,5 @@
 ﻿using Knizhar.Data.Models;
-using Knizhar.Models.Books;
-using Knizhar.Services.Books;
+using Knizhar.Services.Books.Models;
 using System.Collections.Generic;
 
 namespace Knizhar.Models.Home

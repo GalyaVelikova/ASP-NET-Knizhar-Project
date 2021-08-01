@@ -1,7 +1,6 @@
 ﻿namespace Knizhar.Models.Books
 {
-    using Knizhar.Services.Books;
-    using Knizhar.Services.Knizhari;
+    using Knizhar.Services.Books.Models;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     public class BookSearchViewModel
