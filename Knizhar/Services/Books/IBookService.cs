@@ -17,7 +17,7 @@
                 int conditionId,
                 string imageUrl,
                 string description,
-                string author,
+                int author,
                 string comment,
                 bool isForGiveAway,
                 decimal price,
@@ -32,7 +32,7 @@
                 int conditionId,
                 string imageUrl,
                 string description,
-                string author,
+                int author,
                 string comment,
                 bool isForGiveAway,
                 decimal price);

@@ -43,7 +43,7 @@
 
         public bool IsForGiveAway { get; set; }
 
-        public decimal? Price { get; set; }
+        public decimal Price { get; set; }
 
         public DateTime AddedOn { get; set; }
 

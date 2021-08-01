@@ -17,6 +17,7 @@
             public const int BookNameMaxLength = 50;
             public const int BookNameMinLength = 2;
             public const int BookDescriptionMinLength = 10;
+            public const int BookDescriptionMaxLength = 10000;
             public const int CommentMaxLength = 200;
             public const int CommentMinLength = 3;
         }

@@ -26,7 +26,7 @@
         [StringLength(
             AuthorNameMaxLength, 
             MinimumLength = AuthorNameMinLength, 
-            ErrorMessage = "The name of the book should be between {2} and {1} symbols long.")]
+            ErrorMessage = "The name of the author should be between {2} and {1} symbols long.")]
         public string Author { get; init; }
 
         [Required]
@@ -54,12 +54,12 @@
 
         [Required]
         [StringLength(
-            10000, 
+            BookDescriptionMaxLength, 
             MinimumLength=BookDescriptionMinLength, 
             ErrorMessage = "The description of the book should be at least {2} symbols long.")]
         public string Description { get; init; }
         public bool IsForGiveAway { get; set; }
-        public decimal? Price { get; init; }
+        public decimal Price { get; set; }
         public bool IsArchived { get; set; }
 
         public IEnumerable<BookGenreServiceModel> Genres { get; set; }

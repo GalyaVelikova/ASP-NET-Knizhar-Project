@@ -71,7 +71,7 @@
                 return View(book);
             }
 
-            var author = this.books.GetAuthor(book.Author);
+            var authorId = this.books.GetAuthor(book.Author).Id;
 
             this.books.Create(
                 book.Isbn,
@@ -79,12 +79,12 @@
                 book.GenreId,
                 book.LanguageId,
                 book.ConditionId,
-                book.Comment,
                 book.ImageUrl,
                 book.Description,
-                book.Author,
+                authorId,
+                book.Comment,
                 book.IsForGiveAway,
-                (decimal)book.Price,
+                book.Price = book.Price == 0m ? 00.00m : book.Price,
                 knizharId);
 
 
@@ -144,7 +144,7 @@
             {
                 Isbn = book.Isbn,
                 Name = book.Name,
-                Author = book.Author,
+                Author = book.AuthorName,
                 GenreId = book.GenreId,
                 LanguageId = book.LanguageId,
                 ConditionId = book.ConditioId,
@@ -199,7 +199,8 @@
             {
                 return BadRequest();
             }
-            var author = this.books.GetAuthor(book.Author);
+
+            var authorId = this.books.GetAuthor(book.Author).Id;
 
             this.books.Edit(
                 id,
@@ -210,7 +211,7 @@
                 book.ConditionId,
                 book.ImageUrl,
                 book.Description,
-                book.Author,
+                authorId,
                 book.Comment,
                 book.IsForGiveAway,
                 (decimal)book.Price);

@@ -48,9 +48,7 @@ namespace Knizhar
                 options.Filters.Add<AutoValidateAntiforgeryTokenAttribute>();
             });
 
-            services
-                .AddControllersWithViews();
-
+           
             services.AddTransient<IStatisticsService, StatisticsService>();
             services.AddTransient<IBookService, BookService>();
             services.AddTransient<IKnizharService, KnizharService>();
@@ -80,6 +78,10 @@ namespace Knizhar
                 .UseAuthorization()
                 .UseEndpoints(endpoints =>
                 {
+                    endpoints.MapControllerRoute(
+                        name: "Areas",
+                        pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+
                     endpoints.MapDefaultControllerRoute();
                     endpoints.MapRazorPages();
                 });

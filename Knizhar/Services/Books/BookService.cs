@@ -149,7 +149,7 @@
                 {
                     Name = b.Name,
                     ImageUrl = b.ImageUrl,
-                    Author = b.Author.Name,
+                    AuthorName = b.Author.Name,
                     Isbn = b.Isbn,
                     Language = b.Language.LanguageName,
                     Genre = b.Genre.Name,
@@ -173,21 +173,21 @@
         public bool ConditionExists(int conditionId)
             => this.data.Conditions.Any(c => c.Id == conditionId);
 
-        public Author GetAuthor(string authorName)
+        public Author GetAuthor(string author)
         {
-            var author = data.Authors.FirstOrDefault(a => a.Name == authorName);
-            if (author == null)
+            var authorData = data.Authors.FirstOrDefault(a => a.Name == author);
+            if (authorData == null)
             {
-                author = new Author { Name = authorName };
+                authorData = new Author { Name = author };
 
-                this.data.Authors.Add(author);
+                this.data.Authors.Add(authorData);
                 this.data.SaveChanges();
             }
 
-            return author;
+            return authorData;
         }
 
-        public int Create(string isbn, string name, int genreId, int languageId, int conditionId, string imageUrl, string description, string author, string comment, bool isForGiveAway, decimal price, int knizharId)
+        public int Create(string isbn, string name, int genreId, int languageId, int conditionId, string imageUrl, string description, int author, string comment, bool isForGiveAway, decimal price, int knizharId)
         {
             var bookData = new Book
             {
@@ -199,9 +199,9 @@
                 Comment = comment,
                 ImageUrl = imageUrl,
                 Description = description,
-                Author = GetAuthor(author),
+                AuthorId = author,
                 IsForGiveAway = isForGiveAway,
-                Price = price == 0m ? 00.00m : price,
+                Price = price,
                 AddedOn = DateTime.UtcNow,
                 Favourite = false,
                 IsArchived = false,
@@ -214,7 +214,7 @@
             return bookData.Id;
         }
 
-        public bool Edit(int id, string isbn, string name, int genreId, int languageId, int conditionId, string imageUrl, string description, string author, string comment, bool isForGiveAway, decimal price)
+        public bool Edit(int id, string isbn, string name, int genreId, int languageId, int conditionId, string imageUrl, string description, int author, string comment, bool isForGiveAway, decimal price)
         {
             var bookData = this.data.Books.Find(id);
 
@@ -230,7 +230,7 @@
             bookData.ConditionId = conditionId;
             bookData.ImageUrl = imageUrl;
             bookData.Description = description;
-            bookData.Author = GetAuthor(author);
+            bookData.AuthorId = author;
             bookData.Comment = comment;
             bookData.IsForGiveAway = isForGiveAway;
             bookData.Price = price == 0m ? 00.00m : price;

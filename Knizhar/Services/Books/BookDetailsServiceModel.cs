@@ -9,7 +9,8 @@ namespace Knizhar.Models.Books
         public string Name { get; init; }
 
         public string ImageUrl { get; init; }
-        public string Author { get; init; }
+        public string AuthorName { get; init; }
+        public int AuthorId { get; init; }
 
         public string Isbn { get; init; }
 
@@ -26,7 +27,7 @@ namespace Knizhar.Models.Books
         //public string BookLocation { get; init; }
         public bool IsForGiveAway { get; set; }
 
-        public decimal? Price { get; set; }
+        public decimal Price { get; set; }
 
         public int KnizharId { get; init; }
 
