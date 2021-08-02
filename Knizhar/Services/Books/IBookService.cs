@@ -60,5 +60,7 @@
         bool LanguageExists(int languageId);
 
         bool ConditionExists(int conditionId);
+
+        string TheBookIsFor(BookServiceModel bookModel, Book book);
     }
 }

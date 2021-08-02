@@ -16,7 +16,7 @@
     {
         private readonly IStatisticsService statistics;
         private readonly KnizharDbContext data;
-        private readonly IMapper mapper;
+        private readonly IConfigurationProvider mapper;
 
         public HomeController(
             IStatisticsService statistics,
@@ -25,7 +25,7 @@
         {
             this.statistics = statistics;
             this.data = data;
-            this.mapper = mapper;
+            this.mapper = mapper.ConfigurationProvider;
         }
 
         public IActionResult Index(BookServiceModel bookModel)
@@ -33,8 +33,8 @@
             var booksOrderedByDateAdded = this.data.Books.OrderByDescending(b => b.AddedOn).AsQueryable();
             
                 var newlyAddedBooks = booksOrderedByDateAdded
-                .ProjectTo<BookServiceModel>(this.mapper.ConfigurationProvider)
-                .Take(16)
+                .ProjectTo<BookServiceModel>(this.mapper)
+                .Take(12)
                 .ToList();
 
             var totalStatistics = this.statistics.Total();

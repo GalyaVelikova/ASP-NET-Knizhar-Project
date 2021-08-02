@@ -249,7 +249,17 @@
             return true;
         }
 
+        public string TheBookIsFor(BookServiceModel bookModel, Book book)
+        {
+            if (book.IsForGiveAway)
+            {
+                return "Give Away";
+            }
+
+            return "Exchange";
+        }
     }
+    
 
 
 }

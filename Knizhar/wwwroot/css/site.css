@@ -69,4 +69,33 @@ body {
   white-space: nowrap;
   line-height: 60px; /* Vertically center the text there */
 }
+.carousel .carousel-indicators li {
+    background-color: #fff;
+    background-color: rgba(70,70,70,.25);
+}
 
+.carousel .carousel-indicators .active {
+    background-color: #444;
+}
+
+/* Only for beautify example */
+h1 {
+    margin: 60px auto;
+    text-align: center;
+}
+
+    h1 > small {
+        color: #999;
+    }
+
+img {
+    width: 100%;
+}
+
+.carousel .carousel-caption {
+    color: #999;
+}
+
+.carousel-inner img {
+    margin: auto;
+}
