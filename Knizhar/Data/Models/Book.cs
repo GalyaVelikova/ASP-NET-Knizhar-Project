@@ -1,7 +1,6 @@
 ﻿namespace Knizhar.Data.Models
 {
     using System;
-    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using static DataConstants.Book;
     public class Book
@@ -12,7 +11,6 @@
         public int KnizharId { get; init; }
 
         public Knizhar Knizhar { get; init; }
-
         [Required]
         public string Isbn { get; set; }
 
@@ -36,7 +34,11 @@
 
         [MaxLength(CommentMaxLength)]
         public string Comment { get; set; }
-        public string ImageUrl { get; set; }
+
+        public string ImageId { get; set; }
+
+        [Required]
+        public Image Image { get; set; }
 
         [Required]
         public string Description { get; set; }

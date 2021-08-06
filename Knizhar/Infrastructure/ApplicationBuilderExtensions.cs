@@ -333,5 +333,155 @@
                 .GetAwaiter()
                 .GetResult();
         }
+
+        //private static void SeedKnizhari(IServiceProvider services)
+        //{
+        //    var data = services.GetRequiredService<KnizharDbContext>();
+
+        //    if (data.Users.Any())
+        //    {
+        //        return;
+        //    }
+
+        //    data.Users.AddRange(new[]
+        //    {
+
+        //        new User{FullName = "Ivan Dimitrov"},
+        //        new User{FullName = "Galya Velikova"},
+        //        new User{FullName = "Mariya Ivanova"}
+        //    });
+
+        //    data.SaveChanges();
+
+        //    data.Knizhari.AddRange(new[]
+        //    {
+        //        new Knizhar{UserName = "Galya", TownId = 112},
+        //        new Knizhar{UserName = "Ivan", TownId = 5},
+        //        new Knizhar{UserName = "Mariya", TownId = 10},
+        //    });
+
+        //    data.SaveChanges();
+        //}
+        //private static void Books(IServiceProvider services)
+        //{
+        //    var data = services.GetRequiredService<KnizharDbContext>();
+
+        //    if (data.Books.Any())
+        //    {
+        //        return;
+        //    }
+
+        //    data.Books.AddRange(new[]
+        //    {
+        //        new Book
+        //        {
+        //            Isbn = "1234567891234",
+        //            Name = "Under the Yoke",
+        //            GenreId = 15,
+        //            LanguageId = 2,
+        //            ConditionId = 4,
+        //            Description = "Under the Yoke (Bulgarian: Под игото - Pod Igoto), with subtitle A Romance of Bulgarian Liberty[1] is a historical novel by Bulgarian author Ivan Vazov written in 1887-1888 and published in parts 1889–1890 in a magazine The Collection of Folk Tales and in a single book 1894.[2][3] It is set in a small town in Central Bulgaria during the months leading up to the April Uprising in 1876 and is the most famous piece of classic Bulgarian literature. Under the Yoke has been translated into more than 30 languages. The English translation was made in 1894 by William Morfill and published by the London publishing house William Heinemann.",
+        //            Author = new Author{ Name = "Ivan Vazov"},
+        //            Comment = "No comments",
+        //            IsForGiveAway = false,
+        //            Price = 10,
+        //            AddedOn = DateTime.UtcNow,
+        //            Favourite = false,
+        //            IsArchived = false,
+        //            KnizharId = 1,
+        //        },
+        //        new Book
+        //        {
+        //            Isbn = "12345678912",
+        //            Name = "The Colour of Magic",
+        //            GenreId = 16,
+        //            LanguageId = 1,
+        //            ConditionId = 3,
+        //            Description = "The Colour of Magic is a 1983 fantasy comedy novel by Terry Pratchett, and is the first book of the Discworld series. The first printing of the British edition consisted of only 506 copies.[1] Pratchett has described it as an attempt to do for the classical fantasy universe what Blazing Saddles did for Westerns.",
+        //            Author = new Author{ Name = "Terry Pratchett"},
+        //            Image = new Image
+        //            {
+        //                AddedByKnizharId = 1,
+        //                Extension = "jpg",
+
+        //            },
+        //            Comment = "No comments",
+        //            IsForGiveAway = false,
+        //            Price = 35,
+        //            AddedOn = DateTime.UtcNow,
+        //            Favourite = false,
+        //            IsArchived = false,
+        //            KnizharId = 1,
+        //        },
+        //          new Book
+        //        {
+        //            Isbn = "1234567895678",
+        //            Name = "East of Eaden",
+        //            GenreId = 1,
+        //            LanguageId = 1,
+        //            ConditionId = 1,
+        //            Description = "East of Eden is a novel by American author and Nobel Prize winner John Steinbeck. Published in September 1952, the work is regarded by many to be Steinbeck's most ambitious novel and by Steinbeck himself to be his magnum opus.[2] Steinbeck stated about East of Eden: It has everything in it I have been able to learn about my craft or profession in all these years,' and later said: 'I think everything else I have written has been, in a sense, practice for this.The novel was originally addressed to Steinbecks young sons, Thom and John (then 6½ and 4½ years old, respectively). Steinbeck wanted to describe the Salinas Valley for them in detail: the sights, sounds, smells and colors.",
+        //            Author = new Author{ Name = "John Steinbeck"},
+        //            Comment = "No comments",
+        //            IsForGiveAway = false,
+        //            Price = (decimal)9.80,
+        //            AddedOn = DateTime.UtcNow,
+        //            Favourite = false,
+        //            IsArchived = false,
+        //            KnizharId = 2,
+        //        },
+        //          new Book
+        //        {
+        //            Isbn = "12345678956",
+        //            Name = "Jane Eyre",
+        //            GenreId = 1,
+        //            LanguageId = 1,
+        //            ConditionId = 2,
+        //            Description = "Jane Eyre /ɛər/ (originally published as Jane Eyre: An Autobiography) is a novel by English writer Charlotte Brontë, published under the pen name 'Currer Bell', on 16 October 1847, by Smith, Elder & Co. of London. The first American edition was published the following year by Harper & Brothers of New York.[1] Jane Eyre is a Bildungsroman which follows the experiences of its eponymous heroine, including her growth to adulthood and her love for Mr. Rochester, the brooding master of Thornfield Hall.",
+        //            Author = new Author{ Name = "Charlotte Bronte"},
+        //            Comment = "Some underlining with pencil in the book.",
+        //            IsForGiveAway = true,
+        //            Price = 0,
+        //            AddedOn = DateTime.UtcNow,
+        //            Favourite = false,
+        //            IsArchived = false,
+        //            KnizharId = 2,
+        //        },
+        //           new Book
+        //        {
+        //            Isbn = "1234567897845",
+        //            Name = "Pride and Prejudice",
+        //            GenreId = 1,
+        //            LanguageId = 1,
+        //            ConditionId = 3,
+        //            Description = "Pride and Prejudice is an 1813 romantic novel of manners written by Jane Austen. The novel follows the character development of Elizabeth Bennet, the dynamic protagonist of the book who learns about the repercussions of hasty judgments and comes to appreciate the difference between superficial goodness and actual goodness. Its humour lies in its honest depiction of manners, education, marriage, and money during the Regency era in England.",
+        //            AuthorId = 8,
+        //            Comment = "The covers are not in perfect condition.",
+        //            IsForGiveAway = false,
+        //            Price = 15,
+        //            AddedOn = DateTime.UtcNow,
+        //            Favourite = false,
+        //            IsArchived = false,
+        //            KnizharId = 2,
+        //        },
+        //           new Book
+        //        {
+        //            Isbn = "1234567895",
+        //            Name = "World Art: The Essential Illustrated History",
+        //            GenreId = 2,
+        //            LanguageId = 1,
+        //            ConditionId = 1,
+        //            Description = "World Art offers the perfect introduction to art and its appreciation, with over 350 full-colour illustrations of works by popular and important artists from all over the world. Organized by era, the reader is taken from Giotto, through Monet, to Pollock to reveal the development of art over the centuries. Supplemented with sections on Art Movements and Painting Techniques, this is the definitive reference for art enthusiasts of any level of knowledge and understanding.",
+        //            Author = new Author{ Name = "Karen Firzpatrick"},
+        //            Comment = "Some pages are thorn but no text is missing.",
+        //            IsForGiveAway = true,
+        //            Price = 0,
+        //            AddedOn = DateTime.UtcNow,
+        //            Favourite = false,
+        //            IsArchived = false,
+        //            KnizharId = 3,
+        //        }
+        //    });
+        //}
     }
 }

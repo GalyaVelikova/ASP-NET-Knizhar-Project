@@ -24,6 +24,8 @@
 
         public BookSorting Sorting { get; init; }
 
+        public string ImagePath { get; set; }
+
         public IEnumerable<BookServiceModel> Books { get; set; }
     }
 }

@@ -1,13 +1,14 @@
 ﻿namespace Knizhar.Models.Books.Models
 {
     using Knizhar.Services.Books.Models;
+    using Microsoft.AspNetCore.Http;
     using System.Collections.Generic;
     public class BookDetailsServiceModel
     {
         public int Id { get; init; }
         public string Name { get; init; }
 
-        public string ImageUrl { get; init; }
+        public IFormFile Image { get; init; }
         public string AuthorName { get; init; }
         public int AuthorId { get; init; }
 

@@ -5,8 +5,8 @@
     using System.ComponentModel.DataAnnotations;
     using static Data.DataConstants.Book;
     using static Data.DataConstants.Author;
-    using static Data.DataConstants.Condition;
     using Knizhar.Services.Books.Models;
+    using Microsoft.AspNetCore.Http;
 
     public class BookFormModel
     {
@@ -47,9 +47,14 @@
         public string Comment { get; init; }
 
         [Required]
-        [Display(Name = "Image")]
-        [Url]
-        public string ImageUrl { get; init; }
+        [DataType(DataType.Upload)]
+        [MaxFileSize(5 * 1024 * 1024)]
+        [AllowedImageExtensions(new string[] { ".png", ".jpg", ".gif" })]
+        public IFormFile Image { get; init; }
+
+        public string ImagePath { get; set; }
+
+        public string ImageId { get; set; }
 
         [Required]
         [StringLength(

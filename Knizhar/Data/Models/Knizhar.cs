@@ -10,7 +10,7 @@
         [Required]
         [MaxLength(UserNameMaxLength)]
         public string UserName { get; init; }
-
+       
         [Required]
         public int TownId { get; set; }
 
@@ -18,10 +18,6 @@
 
         [Required]
         public string UserId { get; set; }
-
-        //public int ImageId { get; set; }
-
-        //public Image Image { get; set; }
 
         public IEnumerable<Book> Books { get; init; } = new List<Book>();
     }

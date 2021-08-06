@@ -6,22 +6,27 @@
     using Knizhar.Services.Books;
     using Knizhar.Services.Knizhari;
     using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Mvc;
+    using System.IO;
     using System.Linq;
     public class BooksController : Controller
     {
         private readonly IBookService books;
         private readonly IKnizharService knizhari;
         private readonly IMapper mapper;
+        private readonly IWebHostEnvironment environment;
 
         public BooksController(
             IKnizharService knizhari,
             IBookService books,
-            IMapper mapper)
+            IMapper mapper,
+            IWebHostEnvironment environment)
         {
             this.books = books;
             this.knizhari = knizhari;
             this.mapper = mapper;
+            this.environment = environment;
         }
 
         [Authorize]
@@ -83,18 +88,18 @@
                 book.GenreId,
                 book.LanguageId,
                 book.ConditionId,
-                book.ImageUrl,
+                book.Image,
                 book.Description,
                 authorId,
                 book.Comment,
                 book.IsForGiveAway,
                 book.Price = book.Price == 0m ? 00.00m : book.Price,
-                knizharId);
-
+                knizharId,
+                book.ImagePath = $"{this.environment.WebRootPath}/images");
 
             return RedirectToAction(nameof(All));
         }
-        public IActionResult All([FromQuery] BookSearchViewModel search)
+        public IActionResult All([FromQuery] BookSearchViewModel search, string imagePath)
         {
 
             var searchResult = this.books.All(
@@ -104,7 +109,8 @@
                 search.SearchTerm,
                 search.Sorting,
                 search.CurrentPage,
-                BookSearchViewModel.BooksPerPage);
+                BookSearchViewModel.BooksPerPage,
+                search.ImagePath = $"{this.environment.WebRootPath}/images");
 
             var bookGenres = this.books.AllGenres();
             var bookTowns = this.books.AllTowns();
@@ -120,9 +126,11 @@
         }
 
         [Authorize]
-        public IActionResult MyBooks()
+        public IActionResult MyBooks(string imagePath)
         {
-            var myBooks = this.books.ByUser(this.User.Id());
+            imagePath = $"{this.environment.WebRootPath}/images";
+
+            var myBooks = this.books.ByUser(this.User.Id(), imagePath);
 
             return View(myBooks);
         }
@@ -204,7 +212,6 @@
                 book.GenreId,
                 book.LanguageId,
                 book.ConditionId,
-                book.ImageUrl,
                 book.Description,
                 authorId,
                 book.Comment,

@@ -5,6 +5,7 @@
     using Knizhar.Models.Books.Models;
     using Knizhar.Services.Books.Models;
     using Knizhar.Services.Knizhari;
+    using Microsoft.AspNetCore.Http;
     using System.Collections.Generic;
 
     public interface IBookService
@@ -16,13 +17,14 @@
                 int genreId,
                 int languageId,
                 int conditionId,
-                string imageUrl,
+                IFormFile image,
                 string description,
                 int author,
                 string comment,
                 bool isForGiveAway,
                 decimal price,
-                int knizharId);
+                int knizharId,
+                string imagePath);
 
         bool Edit(
                 int bookId,
@@ -31,7 +33,6 @@
                 int genreId,
                 int languageId,
                 int conditionId,
-                string imageUrl,
                 string description,
                 int author,
                 string comment,
@@ -46,9 +47,10 @@
             string searchTerm,
             BookSorting sorting,
             int currentPage,
-            int booksPerPage);
+            int booksPerPage,
+            string imagePath);
         BookDetailsServiceModel Details(int bookId);
-        IEnumerable<BookServiceModel> ByUser(string userId);
+        IEnumerable<BookServiceModel> ByUser(string userId, string imagePath);
         IEnumerable<BookGenreServiceModel> AllGenres();
         IEnumerable<BookLanguageServiceModel> AllLanguages();
         IEnumerable<BookConditionServiceModel> AllConditions();
@@ -60,7 +62,6 @@
         bool LanguageExists(int languageId);
 
         bool ConditionExists(int conditionId);
-
         string TheBookIsFor(BookServiceModel bookModel, Book book);
     }
 }

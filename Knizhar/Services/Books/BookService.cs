@@ -8,8 +8,10 @@
     using Knizhar.Models.Books.Models;
     using Knizhar.Services.Books.Models;
     using Knizhar.Services.Knizhari;
+    using Microsoft.AspNetCore.Http;
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
 
     public class BookService : IBookService
@@ -32,7 +34,8 @@
             string searchTerm,
             BookSorting sorting,
             int currentPage,
-            int booksPerPage)
+            int booksPerPage,
+            string imagePath)
         {
             var booksQuery = this.data.Books.AsQueryable();
 
@@ -78,7 +81,7 @@
 
             var books = GetBooks(booksQuery
                 .Skip((currentPage - 1) * booksPerPage)
-                .Take(booksPerPage));
+                .Take(booksPerPage), imagePath);
 
             return new BookSearchServiceModel
             {
@@ -88,24 +91,29 @@
             };
         }
 
-        public IEnumerable<BookServiceModel> ByUser(string userId)
-            => GetBooks(this.data
+        public IEnumerable<BookServiceModel> ByUser(string userId, string imagePath)
+        {
+
+            var booksByUser = GetBooks(this.data
                 .Books
-                .Where(b => b.Knizhar.UserId == userId));
+                .Where(b => b.Knizhar.UserId == userId), imagePath);
+
+            return booksByUser;
+        }
         public bool IsByKnizhar(int bookId, int knizharId)
             => this.data
                 .Books
                 .Any(b => b.Id == bookId && b.KnizharId == knizharId);
-        private static IEnumerable<BookServiceModel> GetBooks(IQueryable<Book> bookQuery)
+        private static IEnumerable<BookServiceModel> GetBooks(IQueryable<Book> bookQuery, string imagePath)
             => bookQuery
                 .Select(b => new BookServiceModel
                 {
                     Id = b.Id,
                     Name = b.Name,
-                    ImageUrl = b.ImageUrl,
+                    ImagePath = "/images/books/" + b.Image.Id + "." + b.Image.Extension,
                     Author = b.Author.Name,
                     TheBookIsFor = b.IsForGiveAway ? "Give away" : "Exchange",
-                    Price = (decimal)b.Price,
+                    Price = b.Price,
                 })
                 .ToList();
 
@@ -117,6 +125,7 @@
                         Id = b.Id,
                         Name = b.Name,
                     })
+                    .OrderBy(g => g.Name)
                     .ToList();
 
         public IEnumerable<BookLanguageServiceModel> AllLanguages()
@@ -127,6 +136,7 @@
                         Id = l.Id,
                         Name = l.LanguageName,
                     })
+                    .OrderBy(l => l.Name)
                     .ToList();
 
         public IEnumerable<BookConditionServiceModel> AllConditions()
@@ -137,6 +147,7 @@
                         Id = b.Id,
                         Name = b.ConditionName,
                     })
+                    .OrderBy(bc => bc.Name)
                     .ToList();
 
         public IEnumerable<TownServiceModel> AllTowns()
@@ -147,6 +158,7 @@
                         Id = b.Id,
                         Name = b.Name,
                     })
+                    .OrderBy(b => b.Name)
                     .ToList();
 
         public BookDetailsServiceModel Details(int id)
@@ -196,8 +208,27 @@
             return authorData;
         }
 
-        public int Create(string isbn, string name, int genreId, int languageId, int conditionId, string imageUrl, string description, int author, string comment, bool isForGiveAway, decimal price, int knizharId)
+        public int Create(string isbn, string name, int genreId, int languageId, int conditionId, IFormFile image, string description, int author, string comment, bool isForGiveAway, decimal price, int knizharId, string imagePath)
         {
+
+            Directory.CreateDirectory($"{imagePath}/books/");
+
+            var imageData = new Image
+            {
+                AddedByKnizharId = knizharId,
+                Extension = Path.GetExtension(image.FileName).TrimStart('.')
+            };
+
+            var physicalPath = $"{imagePath}/books/{imageData.Id}.{imageData.Extension}";
+
+            using (Stream fileStream = new FileStream(physicalPath, FileMode.Create))
+            {
+                image.CopyTo(fileStream);
+            }
+
+            this.data.Images.Add(imageData);
+            this.data.SaveChanges();
+
             var bookData = new Book
             {
                 Isbn = isbn,
@@ -205,10 +236,10 @@
                 GenreId = genreId,
                 LanguageId = languageId,
                 ConditionId = conditionId,
-                Comment = comment,
-                ImageUrl = imageUrl,
                 Description = description,
                 AuthorId = author,
+                Comment = comment,
+                ImageId = imageData.Id,
                 IsForGiveAway = isForGiveAway,
                 Price = price,
                 AddedOn = DateTime.UtcNow,
@@ -223,7 +254,7 @@
             return bookData.Id;
         }
 
-        public bool Edit(int id, string isbn, string name, int genreId, int languageId, int conditionId, string imageUrl, string description, int author, string comment, bool isForGiveAway, decimal price)
+        public bool Edit(int id, string isbn, string name, int genreId, int languageId, int conditionId, string description, int author, string comment, bool isForGiveAway, decimal price)
         {
             var bookData = this.data.Books.Find(id);
 
@@ -237,7 +268,6 @@
             bookData.GenreId = genreId;
             bookData.LanguageId = languageId;
             bookData.ConditionId = conditionId;
-            bookData.ImageUrl = imageUrl;
             bookData.Description = description;
             bookData.AuthorId = author;
             bookData.Comment = comment;
@@ -259,7 +289,4 @@
             return "Exchange";
         }
     }
-    
-
-
 }

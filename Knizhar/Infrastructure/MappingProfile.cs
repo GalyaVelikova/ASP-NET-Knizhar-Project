@@ -5,7 +5,6 @@
     using Knizhar.Models.Books;
     using Knizhar.Models.Books.Models;
     using Knizhar.Services.Books.Models;
-    using Knizhar.Services.Books;
 
     public class MappingProfile : Profile
     {
@@ -13,7 +12,9 @@
         {
             this.CreateMap<Book, BookServiceModel>()
                 .ForMember(b => b.Author, cfg => cfg.MapFrom(b => b.Author.Name))
+                .ForMember(b => b.ImagePath, cfg => cfg.MapFrom(b => "/images/books/" + b.Image.Id + "." + b.Image.Extension))
                 .ForMember(b => b.TheBookIsFor, opt => opt.MapFrom(src => src.IsForGiveAway ? "Give away" : "Exchange"));
+
             this.CreateMap<BookDetailsServiceModel, BookFormModel>();
 
             this.CreateMap<Book, BookDetailsServiceModel>()

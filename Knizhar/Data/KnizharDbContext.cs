@@ -24,6 +24,8 @@
 
         public DbSet<Town> Towns { get; init; }
 
+        public DbSet<Image> Images { get; init; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -71,6 +73,12 @@
                 .WithOne()
                 .HasForeignKey<Knizhar>(k => k.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder
+                .Entity<Book>()
+                .HasOne(b => b.Image)
+                .WithOne(i => i.Book)
+                .HasForeignKey<Book>(b => b.ImageId);
         }
     }
 }

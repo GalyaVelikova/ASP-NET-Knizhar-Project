@@ -7,7 +7,6 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using System.Linq;
-    using System.Collections.Generic;
     using Knizhar.Services.Knizhari;
 
     public class KnizhariController : Controller

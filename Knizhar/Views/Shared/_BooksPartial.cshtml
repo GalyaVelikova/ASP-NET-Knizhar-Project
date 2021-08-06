@@ -5,7 +5,7 @@
     {
         <div class="card col-md-2 rounded ml-2 mb-2 rounded">
             <a asp-controller="Books" asp-action="Details" asp-route-id="@book.Id">
-                <img class="card-img-top" src="@book.ImageUrl" alt="Card image cap">
+                <img class="card-img-top" src="@book.ImagePath" alt="Card image cap">
             </a>
             <div class="card-body">
                 <p class="font-weight-light text-center">@book.Author</p>
