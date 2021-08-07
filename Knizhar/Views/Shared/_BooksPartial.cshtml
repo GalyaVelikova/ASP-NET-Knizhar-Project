@@ -4,12 +4,12 @@
     @foreach (var book in Model)
     {
         <div class="card col-md-2 rounded ml-2 mb-2 rounded">
-            <a asp-controller="Books" asp-action="Details" asp-route-id="@book.Id">
+            <a asp-controller="Books" asp-action="Details" asp-route-id="@book.Id" asp-route-information="@book.GetInformation()">
                 <img class="card-img-top" src="@book.ImagePath" alt="Card image cap">
             </a>
             <div class="card-body">
-                <p class="font-weight-light text-center">@book.Author</p>
-                <a asp-controller="Books" asp-action="Details" asp-route-id="@book.Id">
+                <p class="font-weight-light text-center">@book.AuthorName</p>
+                <a asp-controller="Books" asp-action="Details" asp-route-id="@book.Id" asp-route-information="@book.GetInformation()">
                     <h5 class="text-uppercase text-center text-dark">@book.Name</h5>
                 </a>
                 <div class="d-flex flex-row d-flex justify-content-center">

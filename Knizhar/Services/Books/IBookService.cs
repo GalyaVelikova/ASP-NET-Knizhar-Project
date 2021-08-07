@@ -2,11 +2,11 @@
 {
     using Knizhar.Data.Models;
     using Knizhar.Models.Books;
-    using Knizhar.Models.Books.Models;
     using Knizhar.Services.Books.Models;
     using Knizhar.Services.Knizhari;
     using Microsoft.AspNetCore.Http;
     using System.Collections.Generic;
+    using System.Linq;
 
     public interface IBookService
     {
@@ -49,8 +49,13 @@
             int currentPage,
             int booksPerPage,
             string imagePath);
-        BookDetailsServiceModel Details(int bookId);
+        BookDetailsModel Details(int bookId);
         IEnumerable<BookServiceModel> ByUser(string userId, string imagePath);
+        BookSearchServiceModel Filter(
+             string filterName,
+             int currentPage,
+             int booksPerPage,
+             string imagePath);
         IEnumerable<BookGenreServiceModel> AllGenres();
         IEnumerable<BookLanguageServiceModel> AllLanguages();
         IEnumerable<BookConditionServiceModel> AllConditions();

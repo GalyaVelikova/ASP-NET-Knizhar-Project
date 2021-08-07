@@ -1,0 +1,13 @@
+﻿@model BookSearchServiceModel
+
+@{
+    ViewBag.Title = "Books By {Author}";
+    ViewBag.AllowBookEdit = false;
+}
+
+@*@if (!Model.Any())
+{
+    <h2 class="text-center">You do not have any books yet.</h2>
+}*@
+
+<partial name="_BooksPartial" model="@Model.Books" />

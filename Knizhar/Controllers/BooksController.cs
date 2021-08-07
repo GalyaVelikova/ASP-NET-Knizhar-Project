@@ -4,11 +4,11 @@
     using Knizhar.Infrastructure;
     using Knizhar.Models.Books;
     using Knizhar.Services.Books;
+    using Knizhar.Services.Books.Models;
     using Knizhar.Services.Knizhari;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Mvc;
-    using System.IO;
     using System.Linq;
     public class BooksController : Controller
     {
@@ -133,6 +133,33 @@
             var myBooks = this.books.ByUser(this.User.Id(), imagePath);
 
             return View(myBooks);
+        }
+
+        public IActionResult Details(int id, string information)
+        {
+
+            var book = this.books.Details(id);
+
+            if (information != book.GetInformation())
+            {
+                return BadRequest();
+            }
+            return View(book);
+        }
+
+        public IActionResult Filter([FromQuery] string filterName, string imagePath, BookDetailsModel book)
+        {
+            imagePath = $"{this.environment.WebRootPath}/images";
+            var currentPage = book.CurrentPage;
+            var booksPerPage = BookDetailsModel.BooksPerPage;
+
+            var filterResult = this.books.Filter(
+                filterName,
+                currentPage,
+                booksPerPage,
+                imagePath);
+
+            return View(filterResult);
         }
 
         [Authorize]

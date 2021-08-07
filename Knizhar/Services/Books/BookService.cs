@@ -5,7 +5,6 @@
     using Knizhar.Data;
     using Knizhar.Data.Models;
     using Knizhar.Models.Books;
-    using Knizhar.Models.Books.Models;
     using Knizhar.Services.Books.Models;
     using Knizhar.Services.Knizhari;
     using Microsoft.AspNetCore.Http;
@@ -111,7 +110,7 @@
                     Id = b.Id,
                     Name = b.Name,
                     ImagePath = "/images/books/" + b.Image.Id + "." + b.Image.Extension,
-                    Author = b.Author.Name,
+                    AuthorName = b.Author.Name,
                     TheBookIsFor = b.IsForGiveAway ? "Give away" : "Exchange",
                     Price = b.Price,
                 })
@@ -161,31 +160,72 @@
                     .OrderBy(b => b.Name)
                     .ToList();
 
-        public BookDetailsServiceModel Details(int id)
-            => this.data
-                .Books
-                .Where(b => b.Id == id)
-                .ProjectTo<BookDetailsServiceModel>(this.mapper)
-                //.Select(b => new BookDetailsServiceModel
-                //{
-                //    Name = b.Name,
-                //    ImageUrl = b.ImageUrl,
-                //    AuthorName = b.Author.Name,
-                //    Isbn = b.Isbn,
-                //    Language = b.Language.LanguageName,
-                //    Genre = b.Genre.Name,
-                //    Description = b.Description,
-                //    Condition = b.Condition.ConditionName,
-                //    Comment = b.Comment,
-                //    IsForGiveAway = b.IsForGiveAway,
-                //    Price = b.Price == 0 ? 00.00m : b.Price,
-                //    KnizharId = b.KnizharId,
-                //    KnizharName = b.Knizhar.UserName,
-                //    UserId = b.Knizhar.UserId
+        public BookDetailsModel Details(int id)
+            =>this.data
+                  .Books
+                  .Where(b => b.Id == id)
+                  .ProjectTo<BookDetailsModel>(this.mapper)
+                  //.Select(b => new BookDetailsServiceModel
+                  //{
+                  //    Name = b.Name,
+                  //    ImageUrl = b.ImageUrl,
+                  //    AuthorName = b.Author.Name,
+                  //    Isbn = b.Isbn,
+                  //    Language = b.Language.LanguageName,
+                  //    Genre = b.Genre.Name,
+                  //    Description = b.Description,
+                  //    Condition = b.Condition.ConditionName,
+                  //    Comment = b.Comment,
+                  //    IsForGiveAway = b.IsForGiveAway,
+                  //    Price = b.Price == 0 ? 00.00m : b.Price,
+                  //    KnizharId = b.KnizharId,
+                  //    KnizharName = b.Knizhar.UserName,
+                  //    UserId = b.Knizhar.UserId
 
-                //})
-                .FirstOrDefault();
+                  //})
+                  .FirstOrDefault();
 
+        public BookSearchServiceModel Filter(
+             string filterName,
+             int currentPage,
+             int booksPerPage,
+             string imagePath)
+        {
+            var booksQuery = this.data.Books.AsQueryable();
+
+            if (this.data.Genres.Any(g => g.Name == filterName))
+            {
+                booksQuery = booksQuery.Where(b => b.Genre.Name == filterName);
+            }
+
+            if (this.data.Towns.Any(t => t.Name == filterName))
+            {
+                booksQuery = booksQuery.Where(b => b.Knizhar.Town.Name == filterName);
+            }
+
+            if (this.data.Languages.Any(l => l.LanguageName == filterName))
+            {
+                booksQuery = booksQuery.Where(b => b.Language.LanguageName == filterName);
+            }
+
+            if (this.data.Authors.Any(a => a.Name == filterName))
+            {
+                booksQuery = booksQuery.Where(b => b.Author.Name == filterName);
+            }
+
+            var totalBooks = booksQuery.Count();
+
+            var books = GetBooks(booksQuery
+                .Skip((currentPage - 1) * booksPerPage)
+                .Take(booksPerPage), imagePath);
+
+            return new BookSearchServiceModel
+            {
+                TotalBooks = totalBooks,
+                CurrentPage = currentPage,
+                Books = books,
+            };
+        }
         public bool GenreExists(int genreId)
             => this.data.Genres.Any(g => g.Id == genreId);
         public bool LanguageExists(int languageId)
@@ -288,5 +328,6 @@
 
             return "Exchange";
         }
+
     }
 }

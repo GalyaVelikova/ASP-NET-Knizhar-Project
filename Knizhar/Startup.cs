@@ -82,6 +82,10 @@ namespace Knizhar
                 {
 
                     endpoints.MapDefaultAreaRoute();
+                    endpoints.MapControllerRoute(
+                        name: "Book Details",
+                        pattern: "/Books/Details/{id}/{information}",
+                        defaults: new { controller = "Books", action = "Details" });
                     endpoints.MapDefaultControllerRoute();
                     endpoints.MapRazorPages();
                 });
