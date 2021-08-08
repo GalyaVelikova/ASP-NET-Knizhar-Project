@@ -37,18 +37,20 @@
                 int author,
                 string comment,
                 bool isForGiveAway,
-                decimal price);
+                decimal price,
+                bool isPublic);
 
         Author GetAuthor(string authorName);
         BookSearchServiceModel All(
-            string genre,
-            string town,
-            string language,
-            string searchTerm,
-            BookSorting sorting,
-            int currentPage,
-            int booksPerPage,
-            string imagePath);
+            string imagePath,
+            string genre = null,
+            string town = null,
+            string language = null,
+            string searchTerm = null,
+            BookSorting sorting = BookSorting.Newest,
+            int currentPage = 1,
+            int booksPerPage = int.MaxValue,
+            bool publicOnly = true);
         BookDetailsModel Details(int bookId);
         IEnumerable<BookServiceModel> ByUser(string userId, string imagePath);
         BookSearchServiceModel Filter(
@@ -68,5 +70,6 @@
 
         bool ConditionExists(int conditionId);
         string TheBookIsFor(BookServiceModel bookModel, Book book);
+        void ChnageVisiblity(int carId);
     }
 }

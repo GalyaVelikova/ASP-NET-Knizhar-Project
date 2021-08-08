@@ -1,4 +1,4 @@
-﻿namespace Knizhar.Infrastructure
+﻿namespace Knizhar.Infrastructure.Extensions
 {
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Routing;

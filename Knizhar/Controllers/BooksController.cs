@@ -1,7 +1,7 @@
 ﻿namespace Knizhar.Controllers
 {
     using AutoMapper;
-    using Knizhar.Infrastructure;
+    using Knizhar.Infrastructure.Extensions;
     using Knizhar.Models.Books;
     using Knizhar.Services.Books;
     using Knizhar.Services.Books.Models;
@@ -10,6 +10,8 @@
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Mvc;
     using System.Linq;
+
+    using static WebConstants;
     public class BooksController : Controller
     {
         private readonly IBookService books;
@@ -80,9 +82,9 @@
                 return View(book);
             }
 
-            var authorId = this.books.GetAuthor(book.Author).Id;
+            var authorId = this.books.GetAuthor(book.AuthorName).Id;
 
-            this.books.Create(
+            var bookid = this.books.Create(
                 book.Isbn,
                 book.Name,
                 book.GenreId,
@@ -97,20 +99,22 @@
                 knizharId,
                 book.ImagePath = $"{this.environment.WebRootPath}/images");
 
-            return RedirectToAction(nameof(All));
+            TempData[GlobalMessageKey] = "Your book was added successfully and it is waiting for approval.";
+
+            return RedirectToAction(nameof(Details), new { id = bookid, information = book.GetInformation() });
         }
         public IActionResult All([FromQuery] BookSearchViewModel search, string imagePath)
         {
 
             var searchResult = this.books.All(
+                search.ImagePath = $"{this.environment.WebRootPath}/images",
                 search.Genre,
-                search.Language,
                 search.Town,
+                search.Language,
                 search.SearchTerm,
                 search.Sorting,
                 search.CurrentPage,
-                BookSearchViewModel.BooksPerPage,
-                search.ImagePath = $"{this.environment.WebRootPath}/images");
+                BookSearchViewModel.BooksPerPage);
 
             var bookGenres = this.books.AllGenres();
             var bookTowns = this.books.AllTowns();
@@ -184,7 +188,7 @@
             bookForm.Genres = this.books.AllGenres();
             bookForm.Languages = this.books.AllLanguages();
             bookForm.Conditions = this.books.AllConditions();
-            bookForm.Author = book.AuthorName;
+            bookForm.AuthorName = book.AuthorName;
 
             return View(bookForm);
         }
@@ -230,7 +234,7 @@
                 return BadRequest();
             }
 
-            var authorId = this.books.GetAuthor(book.Author).Id;
+            var authorId = this.books.GetAuthor(book.AuthorName).Id;
 
             this.books.Edit(
                 id,
@@ -243,9 +247,12 @@
                 authorId,
                 book.Comment,
                 book.IsForGiveAway,
-                (decimal)book.Price);
+                (decimal)book.Price,
+                this.User.IsAdmin());
 
-            return RedirectToAction(nameof(All));
+            TempData[GlobalMessageKey] = $"The information about your book was edited successfully{(this.User.IsAdmin() ? string.Empty : " and it is waiting for approval")}.";
+
+            return RedirectToAction(nameof(Details), new { id, information = book.GetInformation() });
         }
     }
 }

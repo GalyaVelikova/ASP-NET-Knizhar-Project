@@ -3,7 +3,7 @@ namespace Knizhar
 
     using Knizhar.Data;
     using Knizhar.Data.Models;
-    using Knizhar.Infrastructure;
+    using Knizhar.Infrastructure.Extensions;
     using Knizhar.Services;
     using Knizhar.Services.Books;
     using Knizhar.Services.Knizhari;
@@ -44,6 +44,7 @@ namespace Knizhar
                 .AddEntityFrameworkStores<KnizharDbContext>();
 
             services.AddAutoMapper(typeof(Startup));
+            services.AddMemoryCache();
 
             services.AddControllersWithViews(options =>
             {

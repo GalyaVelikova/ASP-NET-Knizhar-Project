@@ -27,16 +27,19 @@
         }
 
         public BookSearchServiceModel All(
-            string genre,
-            string town,
-            string language,
-            string searchTerm,
-            BookSorting sorting,
-            int currentPage,
-            int booksPerPage,
-            string imagePath)
+            string imagePath,
+            string genre = null,
+            string town = null,
+            string language = null,
+            string searchTerm = null,
+            BookSorting sorting = BookSorting.Newest,
+            int currentPage = 1,
+            int booksPerPage = int.MaxValue,
+            bool publicOnly = true)
         {
-            var booksQuery = this.data.Books.AsQueryable();
+            var booksQuery = this.data.Books
+                .Where(b => !publicOnly || b.isPublic)
+                .AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(genre))
             {
@@ -103,60 +106,36 @@
             => this.data
                 .Books
                 .Any(b => b.Id == bookId && b.KnizharId == knizharId);
-        private static IEnumerable<BookServiceModel> GetBooks(IQueryable<Book> bookQuery, string imagePath)
+        private IEnumerable<BookServiceModel> GetBooks(IQueryable<Book> bookQuery, string imagePath)
             => bookQuery
-                .Select(b => new BookServiceModel
-                {
-                    Id = b.Id,
-                    Name = b.Name,
-                    ImagePath = "/images/books/" + b.Image.Id + "." + b.Image.Extension,
-                    AuthorName = b.Author.Name,
-                    TheBookIsFor = b.IsForGiveAway ? "Give away" : "Exchange",
-                    Price = b.Price,
-                })
+                .ProjectTo<BookServiceModel>(this.mapper)
                 .ToList();
 
         public IEnumerable<BookGenreServiceModel> AllGenres()
             => this.data
                     .Genres
-                    .Select(b => new BookGenreServiceModel
-                    {
-                        Id = b.Id,
-                        Name = b.Name,
-                    })
+                    .ProjectTo<BookGenreServiceModel>(this.mapper)
                     .OrderBy(g => g.Name)
                     .ToList();
 
         public IEnumerable<BookLanguageServiceModel> AllLanguages()
              => this.data
                     .Languages
-                    .Select(l => new BookLanguageServiceModel
-                    {
-                        Id = l.Id,
-                        Name = l.LanguageName,
-                    })
+                    .ProjectTo<BookLanguageServiceModel>(this.mapper)
                     .OrderBy(l => l.Name)
                     .ToList();
 
         public IEnumerable<BookConditionServiceModel> AllConditions()
             => this.data
                     .Conditions
-                    .Select(b => new BookConditionServiceModel
-                    {
-                        Id = b.Id,
-                        Name = b.ConditionName,
-                    })
+                    .ProjectTo<BookConditionServiceModel>(this.mapper)
                     .OrderBy(bc => bc.Name)
                     .ToList();
 
         public IEnumerable<TownServiceModel> AllTowns()
         => this.data
                     .Towns
-                    .Select(b => new TownServiceModel
-                    {
-                        Id = b.Id,
-                        Name = b.Name,
-                    })
+                    .ProjectTo<TownServiceModel>(this.mapper)
                     .OrderBy(b => b.Name)
                     .ToList();
 
@@ -285,6 +264,7 @@
                 AddedOn = DateTime.UtcNow,
                 Favourite = false,
                 IsArchived = false,
+                isPublic = false,
                 KnizharId = knizharId,
             };
 
@@ -294,7 +274,19 @@
             return bookData.Id;
         }
 
-        public bool Edit(int id, string isbn, string name, int genreId, int languageId, int conditionId, string description, int author, string comment, bool isForGiveAway, decimal price)
+        public bool Edit(
+            int id, 
+            string isbn, 
+            string name, 
+            int genreId, 
+            int languageId, 
+            int conditionId, 
+            string description, 
+            int author, 
+            string comment, 
+            bool isForGiveAway, 
+            decimal price,
+            bool isPublic)
         {
             var bookData = this.data.Books.Find(id);
 
@@ -313,6 +305,7 @@
             bookData.Comment = comment;
             bookData.IsForGiveAway = isForGiveAway;
             bookData.Price = price == 0m ? 00.00m : price;
+            bookData.isPublic = false;
 
             this.data.SaveChanges();
 
@@ -329,5 +322,13 @@
             return "Exchange";
         }
 
+        public void ChnageVisiblity(int carId)
+        {
+            var book = this.data.Books.Find(carId);
+
+            book.isPublic = !book.isPublic;
+
+            this.data.SaveChanges();
+        }
     }
 }

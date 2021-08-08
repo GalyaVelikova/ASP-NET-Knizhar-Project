@@ -8,7 +8,7 @@
     using Knizhar.Services.Books.Models;
     using Microsoft.AspNetCore.Http;
 
-    public class BookFormModel
+    public class BookFormModel : IBookModel
     {
         [Required]
         [IsbnValidationAttribute]
@@ -26,7 +26,7 @@
             AuthorNameMaxLength, 
             MinimumLength = AuthorNameMinLength, 
             ErrorMessage = "The name of the author should be between {2} and {1} symbols long.")]
-        public string Author { get; set; }
+        public string AuthorName { get; set; }
 
         [Required]
         [Display(Name = "Genre")]

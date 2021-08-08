@@ -53,6 +53,8 @@
 
         public bool IsArchived { get; set; }
 
+        public bool isPublic { get; set; }
+
        //public IEnumerable<ApplicationUser> UsersFavouriteBooks { get; init; } = new List<ApplicationUser>();
 
         //public ICollection<ApplicationUser> Users { get; init; } = new List<ApplicationUser>();

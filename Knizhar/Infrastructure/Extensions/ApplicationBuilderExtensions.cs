@@ -1,4 +1,4 @@
-﻿namespace Knizhar.Infrastructure
+﻿namespace Knizhar.Infrastructure.Extensions
 {
     using Knizhar.Data;
     using Knizhar.Data.Models;

@@ -1,13 +1,15 @@
 ﻿namespace Knizhar.Controllers
 {
     using Knizhar.Data;
-    using Knizhar.Infrastructure;
+    using Knizhar.Infrastructure.Extensions;
     using Knizhar.Models.Knizhari;
     using Knizhar.Data.Models;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using System.Linq;
     using Knizhar.Services.Knizhari;
+
+    using static WebConstants;
 
     public class KnizhariController : Controller
     {
@@ -70,6 +72,8 @@
             this.data.Knizhari.Add(knizharData);
 
             this.data.SaveChanges();
+
+            TempData[GlobalMessageKey] = "Thank you for becoming a Knizhar!";
 
             return RedirectToAction("All", "Books");
         }

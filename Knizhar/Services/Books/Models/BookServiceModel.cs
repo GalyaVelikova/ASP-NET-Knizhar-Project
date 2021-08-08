@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Knizhar.Services.Books.Models
+﻿namespace Knizhar.Services.Books.Models
 {
     public class BookServiceModel : IBookModel
     {
@@ -11,6 +9,7 @@ namespace Knizhar.Services.Books.Models
         public string TheBookIsFor { get; set; }
         public decimal? Price { get; set; }
 
+        public bool isPublic { get; init; }
         //public bool IsFavourite { get; set; }
     }
 }
