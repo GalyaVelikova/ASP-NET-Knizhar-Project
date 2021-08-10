@@ -34,6 +34,9 @@
 
         public string UserId { get; init; }
 
+        public double AverageVote { get; set; }
+
+        public int TotalVotes { get; set; }
     }
 
 }

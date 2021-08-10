@@ -20,5 +20,6 @@
         public string UserId { get; set; }
 
         public IEnumerable<Book> Books { get; init; } = new List<Book>();
+        public IList<Vote> Votes { get; init; } = new List<Vote>();
     }
 }

@@ -3,10 +3,8 @@
     using Knizhar.Data;
     using Knizhar.Infrastructure.Extensions;
     using Knizhar.Models.Knizhari;
-    using Knizhar.Data.Models;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
-    using System.Linq;
     using Knizhar.Services.Knizhari;
 
     using static WebConstants;
@@ -37,10 +35,8 @@
         {
             var userId = this.User.Id();
 
-            var userIsKnizhar = this.data
-                .Knizhari
-                .Any(k => k.UserId == userId);
-
+            var userIsKnizhar = knizhari.IsKnizhar(userId);
+             
             if (userIsKnizhar)
             {
                 return BadRequest();
@@ -62,16 +58,10 @@
             //    this.data.SaveChanges();
             //}
 
-            var knizharData = new Knizhar
-            {
-                UserName = knizhar.UserName,
-                TownId = knizhar.TownId,
-                UserId = userId,
-            };
-
-            this.data.Knizhari.Add(knizharData);
-
-            this.data.SaveChanges();
+            knizhari.Create(
+                    knizhar.UserName, 
+                    knizhar.TownId, 
+                    userId);
 
             TempData[GlobalMessageKey] = "Thank you for becoming a Knizhar!";
 

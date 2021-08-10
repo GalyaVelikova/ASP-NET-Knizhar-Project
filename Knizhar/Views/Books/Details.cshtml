@@ -1,5 +1,6 @@
 ﻿@model BookDetailsModel
 
+
 @{
     ViewBag.Title = "Details";
 }
@@ -39,20 +40,60 @@
 
             <div class="media">
                 <img img class="mr-3 resp-img mt-3 w-25 p-3 col-3" src="@Model.ImagePath" alt="Generic placeholder image">
-            <div class="media-body col-4 mt-3">
-                <h4 itemprop="name" class="desc-title">@Model.Name</h4>
-                <ul class="desc-info-book">
-                    <li>Author: <span itemprop="author" style="float:right;" itemscope="" itemtype="http://schema.org/Person"><a asp-controller="Books" asp-action="Filter" asp-route-authorName="@Model.AuthorName"><span itemprop="name">@Model.AuthorName</span></a></span></li>
-                    <li>ISBN:	<span itemprop="isbn" style="float:right;">@Model.Isbn</span></li>
-                    <li>Language:	<a asp-controller="Books" asp-action="Filter" asp-route-languageName="@Model.LanguageName"><span itemprop="inLanguage" style="float:right;">@Model.LanguageName</span></a></li>
-                    <li>Genre: <a asp-controller="Books" asp-action="Filter" asp-route-genreName="@Model.GenreName"><span itemprop="genre" style="float:right;">@Model.GenreName</span></a></li>
-                    <li>The book is located in: <a asp-controller="Books" asp-action="Filter" asp-route-townName="@Model.TownName" target="_blank" style="float:right;">@Model.TownName</a></li>
-                    <li>
-                        The book is for
-                        <span class="price-free" style="float:right;">@Model.TheBookIsFor</span>
-                    </li>
-                    <li><div itemprop="offers" itemscope="" itemtype="http://schema.org/Offer">The Knizhar would sell it for<span class="price-desc" style="float:right;"><span itemprop="price">@Model.Price</span><span itemprop="priceCurrency" content="BGN">BGN</span></span></div></li>
-                </ul>
-            </div>
+                <div class="media-body col-4 mt-3">
+                    <h4 itemprop="name" class="desc-title">@Model.Name</h4>
+                    <ul class="desc-info-book">
+                        <li>Author: <span itemprop="author" style="float:right;" itemscope="" itemtype="http://schema.org/Person"><a asp-controller="Books" asp-action="Filter" asp-route-authorName="@Model.AuthorName"><span itemprop="name">@Model.AuthorName</span></a></span></li>
+                        <li>ISBN:	<span itemprop="isbn" style="float:right;">@Model.Isbn</span></li>
+                        <li>Language:	<a asp-controller="Books" asp-action="Filter" asp-route-languageName="@Model.LanguageName"><span itemprop="inLanguage" style="float:right;">@Model.LanguageName</span></a></li>
+                        <li>Genre: <a asp-controller="Books" asp-action="Filter" asp-route-genreName="@Model.GenreName"><span itemprop="genre" style="float:right;">@Model.GenreName</span></a></li>
+                        <li>The book is located in: <a asp-controller="Books" asp-action="Filter" asp-route-townName="@Model.TownName" target="_blank" style="float:right;">@Model.TownName</a></li>
+                        <li>
+                            The book is for
+                            <span class="price-free" style="float:right;">@Model.TheBookIsFor</span>
+                        </li>
+                        <li><div itemprop="offers" itemscope="" itemtype="http://schema.org/Offer">The Knizhar would sell it for<span class="price-desc" style="float:right;"><span itemprop="price">@Model.Price</span><span itemprop="priceCurrency" content="BGN">BGN</span></span></div></li>
+                    </ul>
+                    <h4 itemprop="name" class="desc-title">Knizhar Information</h4>
+                    <ul class="desc-info-book">
+                        <li>Name: <a @*asp-controller="Books" asp-action="Filter" asp-route-genreName="@Model.GenreName"*@><span itemprop="genre" style="float:right;">@Model.KnizharName</span></a></li>
+                        <li>Town: <a asp-controller="Books" asp-action="Filter" asp-route-townName="@Model.TownName" target="_blank" style="float:right;">@Model.TownName</a></li>
+                    </ul>
+                    <h6 class="heading">User Rating</h6>
+                    <ul>
+                        <li class="fa fa-star" data-vote="1"></li>
+                        <li class="fa fa-star" data-vote="2"></li>
+                        <li class="fa fa-star" data-vote="3"></li>
+                        <li class="fa fa-star" data-vote="4"></li>
+                        <li class="fa fa-star" data-vote="5"></li>
+                    </ul>
+                    <p id="averageVoteValue"> @Model.AverageVote.ToString("0.0") average based on @Model.TotalVotes reviews.</p>
+                </div>
         </div>
     </div>
+<form method="post" id="antiforgeryForm"></form>
+@section Scripts{ 
+<script>
+    $("li[data-vote]").each(function (el) {
+        $(this).click(function () {
+            var value = $(this).attr("data-vote");
+            var knizharId = @Model.KnizharId;
+            var antiForgeryToken = $('#antiforgeryForm input[name=__RequestVerificationToken]').val();
+            var data = { knizharId: knizharId, value: value };
+
+            $.ajax({
+                type: "POST",
+                url: '/api/Votes',
+                data: JSON.stringify(data),
+                headers: {
+                    'X-CSRF-TOKEN': antiForgeryToken
+                },
+                success: function (data) {
+                    $('#averageVoteValue').html(data.averageVote.toFixed(1))
+                },
+                contentType: 'application/json',
+            });
+        })
+    })
+ </script>
+}

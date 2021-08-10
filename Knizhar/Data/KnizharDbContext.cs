@@ -25,6 +25,7 @@
         public DbSet<Town> Towns { get; init; }
 
         public DbSet<Image> Images { get; init; }
+        public DbSet<Vote> Votes { get; init; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -79,6 +80,20 @@
                 .HasOne(b => b.Image)
                 .WithOne(i => i.Book)
                 .HasForeignKey<Book>(b => b.ImageId);
+
+            modelBuilder
+               .Entity<Vote>()
+               .HasOne(v => v.User)
+               .WithMany(u => u.Votes)
+               .HasForeignKey(v => v.UserId)
+               .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder
+               .Entity<Vote>()
+               .HasOne(k => k.Knizhar)
+               .WithMany(u => u.Votes)
+               .HasForeignKey(v => v.KnizharId)
+               .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

@@ -99,3 +99,8 @@ img {
 .carousel-inner img {
     margin: auto;
 }
+
+/*Rating*/
+.checked {
+    color: orange;
+}

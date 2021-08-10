@@ -8,6 +8,7 @@ namespace Knizhar
     using Knizhar.Services.Books;
     using Knizhar.Services.Knizhari;
     using Knizhar.Services.Statistics;
+    using Knizhar.Services.Votes;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Identity;
@@ -46,15 +47,21 @@ namespace Knizhar
             services.AddAutoMapper(typeof(Startup));
             services.AddMemoryCache();
 
-            services.AddControllersWithViews(options =>
+            //services.AddControllersWithViews(options =>
+            //{
+            //    options.Filters.Add<AutoValidateAntiforgeryTokenAttribute>();
+            //});
+
+            services.AddAntiforgery(options =>
             {
-                options.Filters.Add<AutoValidateAntiforgeryTokenAttribute>();
+                options.HeaderName = "X-CSRF-TOKEN";
             });
 
-           
+
             services.AddTransient<IStatisticsService, StatisticsService>();
             services.AddTransient<IBookService, BookService>();
             services.AddTransient<IKnizharService, KnizharService>();
+            services.AddTransient<IVoteService, VoteService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -54,6 +54,12 @@
             public const int TownNameMinLength = 3;
             public const int TownNameMaxLength = 30;
         }
+
+        public class Vote
+        {
+            public const int VoteMinValue = 1;
+            public const int VoteMaxValue = 5;
+        }
     };
 
 }

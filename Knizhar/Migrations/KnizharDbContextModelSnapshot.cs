@@ -76,6 +76,9 @@ namespace Knizhar.Migrations
                     b.Property<bool>("IsForGiveAway")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("IsPublic")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Isbn")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -94,9 +97,6 @@ namespace Knizhar.Migrations
                     b.Property<decimal>("Price")
                         .HasPrecision(10, 2)
                         .HasColumnType("decimal(10,2)");
-
-                    b.Property<bool>("isPublic")
-                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
@@ -302,6 +302,31 @@ namespace Knizhar.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
+                });
+
+            modelBuilder.Entity("Knizhar.Data.Models.Vote", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("KnizharId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<byte>("VoteValue")
+                        .HasColumnType("tinyint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("KnizharId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Votes");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -518,6 +543,24 @@ namespace Knizhar.Migrations
                     b.Navigation("Town");
                 });
 
+            modelBuilder.Entity("Knizhar.Data.Models.Vote", b =>
+                {
+                    b.HasOne("Knizhar.Data.Models.Knizhar", "Knizhar")
+                        .WithMany("Votes")
+                        .HasForeignKey("KnizharId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Knizhar.Data.Models.User", "User")
+                        .WithMany("Votes")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Knizhar");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -592,6 +635,8 @@ namespace Knizhar.Migrations
             modelBuilder.Entity("Knizhar.Data.Models.Knizhar", b =>
                 {
                     b.Navigation("Books");
+
+                    b.Navigation("Votes");
                 });
 
             modelBuilder.Entity("Knizhar.Data.Models.Language", b =>
@@ -602,6 +647,11 @@ namespace Knizhar.Migrations
             modelBuilder.Entity("Knizhar.Data.Models.Town", b =>
                 {
                     b.Navigation("Knizhari");
+                });
+
+            modelBuilder.Entity("Knizhar.Data.Models.User", b =>
+                {
+                    b.Navigation("Votes");
                 });
 #pragma warning restore 612, 618
         }
