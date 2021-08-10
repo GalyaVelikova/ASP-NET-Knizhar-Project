@@ -103,7 +103,7 @@
 
             return RedirectToAction(nameof(Details), new { id = bookid, information = book.GetInformation() });
         }
-        public IActionResult All([FromQuery] BookSearchViewModel search, string imagePath)
+        public IActionResult All([FromQuery] BookSearchViewModel search)
         {
 
             var searchResult = this.books.All(
@@ -130,9 +130,9 @@
         }
 
         [Authorize]
-        public IActionResult MyBooks(string imagePath)
+        public IActionResult MyBooks()
         {
-            imagePath = $"{this.environment.WebRootPath}/images";
+            string imagePath = $"{this.environment.WebRootPath}/images";
 
             var myBooks = this.books.ByUser(this.User.Id(), imagePath);
 
@@ -151,9 +151,9 @@
             return View(book);
         }
 
-        public IActionResult Filter([FromQuery] string filterName, string imagePath, BookDetailsModel book)
+        public IActionResult Filter([FromQuery] string filterName, BookDetailsModel book)
         {
-            imagePath = $"{this.environment.WebRootPath}/images";
+            string imagePath = $"{this.environment.WebRootPath}/images";
             var currentPage = book.CurrentPage;
             var booksPerPage = BookDetailsModel.BooksPerPage;
 

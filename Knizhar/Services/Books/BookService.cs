@@ -5,6 +5,7 @@
     using Knizhar.Data;
     using Knizhar.Data.Models;
     using Knizhar.Models.Books;
+    using Knizhar.Models.Home;
     using Knizhar.Services.Books.Models;
     using Knizhar.Services.Knizhari;
     using Microsoft.AspNetCore.Http;
@@ -38,7 +39,7 @@
             bool publicOnly = true)
         {
             var booksQuery = this.data.Books
-                .Where(b => !publicOnly || b.isPublic)
+                .Where(b => !publicOnly || b.IsPublic)
                 .AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(genre))
@@ -264,7 +265,7 @@
                 AddedOn = DateTime.UtcNow,
                 Favourite = false,
                 IsArchived = false,
-                isPublic = false,
+                IsPublic = false,
                 KnizharId = knizharId,
             };
 
@@ -305,7 +306,7 @@
             bookData.Comment = comment;
             bookData.IsForGiveAway = isForGiveAway;
             bookData.Price = price == 0m ? 00.00m : price;
-            bookData.isPublic = false;
+            bookData.IsPublic = false;
 
             this.data.SaveChanges();
 
@@ -326,9 +327,18 @@
         {
             var book = this.data.Books.Find(carId);
 
-            book.isPublic = !book.isPublic;
+            book.IsPublic = !book.IsPublic;
 
             this.data.SaveChanges();
         }
+
+        public List<BookServiceModel> Latest()
+            =>this.data
+                .Books
+                .Where(b => b.IsPublic)
+                .OrderByDescending(b => b.AddedOn)
+                .ProjectTo<BookServiceModel>(this.mapper)
+                .Take(12)
+                .ToList();
     }
 }

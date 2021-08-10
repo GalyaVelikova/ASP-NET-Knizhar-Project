@@ -75,7 +75,7 @@
 
             TempData[GlobalMessageKey] = "Thank you for becoming a Knizhar!";
 
-            return RedirectToAction("All", "Books");
+            return RedirectToAction(nameof(BooksController.All), "Books");
         }
     }
 }

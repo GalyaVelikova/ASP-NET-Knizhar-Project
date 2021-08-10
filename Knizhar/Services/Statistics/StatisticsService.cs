@@ -12,7 +12,7 @@ namespace Knizhar.Services.Statistics
 
         public StatisticsServiceModel Total()
         {
-            var totalBooks = this.data.Books.Count(b => b.isPublic);
+            var totalBooks = this.data.Books.Count(b => b.IsPublic);
             var totalKnizhari = this.data.Knizhari.Count();
 
             return new StatisticsServiceModel

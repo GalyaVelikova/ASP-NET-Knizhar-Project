@@ -1,6 +1,6 @@
 namespace Knizhar
 {
-
+    using Knizhar.Controllers;
     using Knizhar.Data;
     using Knizhar.Data.Models;
     using Knizhar.Infrastructure.Extensions;
@@ -86,7 +86,11 @@ namespace Knizhar
                     endpoints.MapControllerRoute(
                         name: "Book Details",
                         pattern: "/Books/Details/{id}/{information}",
-                        defaults: new { controller = "Books", action = "Details" });
+                        defaults: new 
+                        { 
+                            controller = typeof(BooksController).GetControllerName(), 
+                            action = nameof(BooksController.Details) 
+                        });
                     endpoints.MapDefaultControllerRoute();
                     endpoints.MapRazorPages();
                 });

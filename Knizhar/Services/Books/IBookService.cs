@@ -2,15 +2,15 @@
 {
     using Knizhar.Data.Models;
     using Knizhar.Models.Books;
+    using Knizhar.Models.Home;
     using Knizhar.Services.Books.Models;
     using Knizhar.Services.Knizhari;
     using Microsoft.AspNetCore.Http;
     using System.Collections.Generic;
-    using System.Linq;
 
     public interface IBookService
     {
-
+        List<BookServiceModel>Latest();
         int Create(
                 string isbn,
                 string name,

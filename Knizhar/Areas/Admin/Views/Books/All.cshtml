@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<BookServiceModel>
 
 @{
-    ViewBag.Title = "";
+    ViewBag.Title = "Books Administration";
 }
 
 <h1>All Books</h1>
@@ -29,7 +29,7 @@
             <td scope="col">@book.Price</td>
             <td scope="col">@(book.isPublic ? "Yes" : "No")</td>
             <td scope="col">
-                <a asp-area="" asp-controller="Books" asp-action="Details" asp-route-id="@book.Id" asp-route-information="@book.GetInformation() " class="btn btn-info btn-sm float-right ml-3">Details</a>
+                <a asp-area="" asp-controller="Books" asp-action="Details" asp-route-id="@book.Id" asp-route-information="@book.GetInformation()" class="btn btn-info btn-sm float-right ml-3">Details</a>
                 <a asp-area="" asp-controller="Books" asp-action="Edit" asp-route-id="@book.Id" class="btn btn-success btn-sm float-right ml-3">Edit</a>
                 <a asp-area="Admin" asp-controller="Books" asp-action="ChangeVisibility" asp-route-id="@book.Id" class="btn btn-primary btn-sm float-right ml-3">@(book.isPublic ? "Hide" : "Show")</a>
                 <a asp-area="" asp-controller="Books" asp-action="Delete" asp-route-id="@book.Id" class="btn btn-warning btn-sm float-right ml-3">Delete</a>
