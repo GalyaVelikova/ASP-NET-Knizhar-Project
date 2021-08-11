@@ -63,23 +63,26 @@
                    // .Passing(book => book == null);
 
         [Theory]
-        [InlineData("1234567891", "Book Name", "AuthorName", 1, 1, 1, "Comment for the book.", "wwwroot/images/books",  "1", "Description of the book", true, 0, 1, 1, ".jpg")]
+        [InlineData(1, "AuthorName", 1, 1, ".jpg", 1, "1234567891", "Book Name", 1, 1, 1, "1", "Description for the book.", "Comment for the book", true,  0, 1, "wwwroot/images/books")]
         public void AddPostShouldSaveArticleSetModelStateMessageAndRedirectWhenValidModelState(
-            string isbn,
-            string bookName,
-            string authorName,
-            int genreId,
-            int languageId,
-            int conditionId,
-            string comment,
-            string imagePath,
-            string imageId,
-            string description,
-            bool isForGiveAway,
-            decimal price,
-            int bookId,
+            int authorId, 
+            string authorName, 
+            int addedByKnizharId, 
+            int bookId, 
+            string extension, 
+            int count, 
+            string isbn, 
+            string bookName, 
+            int genreId, 
+            int languageId, 
+            int conditionId, 
+            string imageId, 
+            string description, 
+            string comment, 
+            bool isForGiveAway, 
+            decimal price, 
             int knizharId,
-            string extension)
+            string imagePath)
            => MyController<BooksController>
                .Instance()
                .WithUser(TestUser.Identifier)
@@ -168,5 +171,57 @@
         //               articleListing.Page.ShouldBe(page);
         //           }));
 
+        [Fact]
+        public void DeleteShouldHaveRestrictionsForAuthorizedUsers()
+           => MyController<BooksController>
+               .Instance()
+               .WithUser(TestUser.Identifier)
+               .WithData(GetKnizhar("userName", 1, 1, TestUser.Identifier, 1))
+               .Calling(c => c.Delete(With.Empty<int>()))
+               .ShouldHave()
+               .ActionAttributes(attrs => attrs
+                   .RestrictingForAuthorizedRequests());
+
+        [Fact]
+        public void DeleteShouldReturnNotFoundWhenInvalidId()
+            => MyController<BooksController>
+               .Instance()
+               .WithUser(TestUser.Identifier)
+               .WithData(GetKnizhar("userName", 1, 1, TestUser.Identifier, 1))
+                .Calling(c => c.Delete(With.Any<int>()))
+                .ShouldReturn()
+                .BadRequest();
+
+        //[Fact]
+        //public void DeleteShouldReturnNotFoundWhenNonAuthorUser()
+        //    => MyController<BooksController>
+        //        .Instance(instance => instance
+        //            .WithUser(user => user.WithIdentifier("NonAuthor"))
+        //            .WithData(GetBook(1)))
+        //        .Calling(c => c.Delete(1))
+        //        .ShouldReturn()
+        //        .NotFound();
+
+        [Fact]
+        public void ArchiveShouldHaveRestrictionsForAuthorizedUsers()
+         => MyController<BooksController>
+             .Instance()
+             .WithUser(TestUser.Identifier)
+             .WithData(GetKnizhar("userName", 1, 1, TestUser.Identifier, 1))
+             .Calling(c => c.Archive(With.Empty<int>()))
+             .ShouldHave()
+             .ActionAttributes(attrs => attrs
+                 .RestrictingForAuthorizedRequests());
+
+
+        [Fact]
+        public void ArchiveShouldReturnNotFoundWhenInvalidId()
+            => MyController<BooksController>
+               .Instance()
+               .WithUser(TestUser.Identifier)
+               .WithData(GetKnizhar("userName", 1, 1, TestUser.Identifier, 1))
+                .Calling(c => c.Archive(With.Any<int>()))
+                .ShouldReturn()
+                .BadRequest();
     }
 }

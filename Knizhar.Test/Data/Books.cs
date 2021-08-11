@@ -37,28 +37,32 @@
                Extension = extension,
            };
 
-        public static Book GetBook(string isbn, string name, int genreId, int languageId, int conditionId, string imageId, string description, int author, string comment, bool isForGiveAway, decimal price, int knizharId, string imagePath)
+        public static Book GetBook(int authorId, string authorName, int addedByKnizharId, int bookId, string extension, int count, string isbn, string bookName, int genreId, int languageId, int conditionId, string imageId, string description, string comment, bool isForGiveAway, decimal price, int knizharId)
         => new Book
         {
             Isbn = isbn,
-            Name = name,
+            Name = bookName,
             GenreId = genreId,
             LanguageId = languageId,
             ConditionId = conditionId,
             Description = description,
-            AuthorId = author,
+            Author = GetAuthor(authorId, authorName),
+            AuthorId = authorId,
             Comment = comment,
+            Image = GetImage(imageId, addedByKnizharId, bookId, extension, count),
             ImageId = imageId,
             IsForGiveAway = isForGiveAway,
             Price = price,
             KnizharId = knizharId,
+            IsPublic = true,
+            Id = bookId
         };
 
         public static Author GetAuthor(int id, string name)
             => new Author
             {
                 Name = name,
-                Id = 1
+                Id = id
             };
 
         public static IFormFile CreateTestFormFile(string p_Name, string p_Content)
