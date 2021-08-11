@@ -282,5 +282,32 @@
 
             return RedirectToAction(nameof(MyBooks));
         }
+
+        [Authorize]
+        public IActionResult Archive(int id)
+        {
+            var knizharId = this.knizhari.IdByUser(this.User.Id());
+
+            if (knizharId == 0 && !User.IsAdmin())
+            {
+                return BadRequest();
+            }
+
+            if (!this.books.IsByKnizhar(id, knizharId) && !User.IsAdmin())
+            {
+                return BadRequest();
+            }
+
+            this.books.Archive(id);
+
+            TempData[GlobalMessageKey] = $"The book was archived.";
+
+            if (User.IsAdmin())
+            {
+                return RedirectToAction(nameof(All));
+            }
+
+            return RedirectToAction(nameof(MyBooks));
+        }
     }
 }

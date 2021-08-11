@@ -10,6 +10,8 @@
         public decimal? Price { get; set; }
 
         public bool isPublic { get; init; }
+
+        public bool isArchived { get; init; }
         //public bool IsFavourite { get; set; }
     }
 }

@@ -72,5 +72,7 @@
         void ChnageVisiblity(int carId);
 
         public bool Delete(int bookId);
+
+        public bool Archive(int bookId);
     }
 }

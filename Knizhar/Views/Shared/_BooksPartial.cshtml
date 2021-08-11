@@ -3,7 +3,7 @@
 <div class="row" id="carousel">
     @foreach (var book in Model)
     {
-        <div class="card col-md-2 rounded ml-2 mb-2 rounded">
+        <div class="card col-md-2 rounded ml-2 mb-2">
             <a asp-controller="Books" asp-action="Details" asp-route-id="@book.Id" asp-route-information="@book.GetInformation()">
                 <img class="card-img-top" src="@book.ImagePath" alt="Card image cap">
             </a>
@@ -25,9 +25,9 @@
                 </div>
                 @if (ViewBag.AllowBookEdit == true || User.IsAdmin())
                 {
-                    <a asp-controller="Books" asp-action="Edit" asp-route-id="@book.Id" class="btn btn-success btn-sm">Edit</a>
+                    <a asp-controller="Books" asp-action="Edit" asp-route-id="@book.Id" class="btn btn-success btn-sm @(book.isArchived ? "disabled" : string.Empty)">Edit</a>
                     <a asp-controller="Books" asp-action="Delete" asp-route-id="@book.Id" class="btn btn-warning btn-sm">Delete</a>
-
+                    <a asp-controller="Books" asp-action="Archive" asp-route-id="@book.Id" class="btn btn-secondary btn-sm @(book.isArchived ? "disabled" : string.Empty)">@(book.isArchived ? "Archived" : "Archive")</a>
                 }
             </div>
         </div>

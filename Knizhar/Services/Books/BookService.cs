@@ -5,7 +5,6 @@
     using Knizhar.Data;
     using Knizhar.Data.Models;
     using Knizhar.Models.Books;
-    using Knizhar.Models.Home;
     using Knizhar.Services.Books.Models;
     using Knizhar.Services.Knizhari;
     using Microsoft.AspNetCore.Http;
@@ -39,7 +38,7 @@
             bool publicOnly = true)
         {
             var booksQuery = this.data.Books
-                .Where(b => !publicOnly || b.IsPublic)
+                .Where(b => (!publicOnly || b.IsPublic && !b.IsArchived))
                 .AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(genre))
@@ -171,7 +170,7 @@
              int booksPerPage,
              string imagePath)
         {
-            var booksQuery = this.data.Books.AsQueryable();
+            var booksQuery = this.data.Books.Where(b => !b.IsArchived).AsQueryable();
 
             if (this.data.Genres.Any(g => g.Name == filterName))
             {
@@ -335,7 +334,7 @@
         public List<BookServiceModel> Latest()
             =>this.data
                 .Books
-                .Where(b => b.IsPublic)
+                .Where(b => b.IsPublic && !b.IsArchived)
                 .OrderByDescending(b => b.AddedOn)
                 .ProjectTo<BookServiceModel>(this.mapper)
                 .Take(12)
@@ -352,6 +351,22 @@
             }
 
             return false;
+        }
+
+        public bool Archive(int bookId)
+        {
+            var book = this.data.Books.FirstOrDefault(b => b.Id == bookId);
+
+            if (book != null)
+            {
+                book.IsArchived = true;
+
+                this.data.SaveChanges();
+                return true;
+            }
+
+            return false;
+
         }
     }
 }
