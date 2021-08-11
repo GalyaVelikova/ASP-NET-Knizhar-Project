@@ -340,5 +340,18 @@
                 .ProjectTo<BookServiceModel>(this.mapper)
                 .Take(12)
                 .ToList();
+
+        public bool Delete(int bookId)
+        {
+            var book = this.data.Books.FirstOrDefault(b => b.Id == bookId);
+            if (book != null)
+            {
+                this.data.Books.Remove(book);
+                this.data.SaveChanges();
+                return true;
+            }
+
+            return false;
+        }
     }
 }

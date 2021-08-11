@@ -7,7 +7,7 @@
     using Microsoft.AspNetCore.Mvc;
 
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/votes")]
     public class VotesController : ControllerBase
     {
        
@@ -20,7 +20,7 @@
 
         [HttpPost]
         [Authorize]
-        public PostVoteResponseModel PostVote(PostVoteInputModel voteInput)
+        public PostVoteResponseModel Post(PostVoteInputModel voteInput)
         {
             var userId = this.User.Id();
 

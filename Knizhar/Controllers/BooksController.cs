@@ -254,5 +254,33 @@
 
             return RedirectToAction(nameof(Details), new { id, information = book.GetInformation() });
         }
+
+        
+        [Authorize]
+        public IActionResult Delete(int id)
+        {
+            var knizharId = this.knizhari.IdByUser(this.User.Id());
+
+            if (knizharId == 0 && !User.IsAdmin())
+            {
+                return BadRequest();
+            }
+
+            if (!this.books.IsByKnizhar(id, knizharId) && !User.IsAdmin())
+            {
+                return BadRequest();
+            }
+
+            this.books.Delete(id);
+
+            TempData[GlobalMessageKey] = $"The book was deleted.";
+
+            if (User.IsAdmin())
+            {
+                return RedirectToAction(nameof(All));
+            }
+
+            return RedirectToAction(nameof(MyBooks));
+        }
     }
 }

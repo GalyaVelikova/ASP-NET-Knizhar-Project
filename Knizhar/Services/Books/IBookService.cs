@@ -2,7 +2,6 @@
 {
     using Knizhar.Data.Models;
     using Knizhar.Models.Books;
-    using Knizhar.Models.Home;
     using Knizhar.Services.Books.Models;
     using Knizhar.Services.Knizhari;
     using Microsoft.AspNetCore.Http;
@@ -71,5 +70,7 @@
         bool ConditionExists(int conditionId);
         string TheBookIsFor(BookServiceModel bookModel, Book book);
         void ChnageVisiblity(int carId);
+
+        public bool Delete(int bookId);
     }
 }

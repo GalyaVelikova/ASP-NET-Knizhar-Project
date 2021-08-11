@@ -61,13 +61,13 @@
                     </ul>
                     <h6 class="heading">User Rating</h6>
                     <ul>
-                        <li class="fa fa-star" data-vote="1"></li>
-                        <li class="fa fa-star" data-vote="2"></li>
-                        <li class="fa fa-star" data-vote="3"></li>
-                        <li class="fa fa-star" data-vote="4"></li>
-                        <li class="fa fa-star" data-vote="5"></li>
+                        <li class="fa fa-star" id="rating" data-vote="1"></li>
+                        <li class="fa fa-star" id="rating" data-vote="2"></li>
+                        <li class="fa fa-star" id="rating" data-vote="3"></li>
+                        <li class="fa fa-star" id="rating" data-vote="4"></li>
+                        <li class="fa fa-star" id="rating" data-vote="5"></li>
                     </ul>
-                    <p id="averageVoteValue"> @Model.AverageVote.ToString("0.0") average based on @Model.TotalVotes reviews.</p>
+                    <p id="averageVoteValue"> @Model.AverageVote.ToString("0.0")<span> average based on @Model.TotalVotes reviews.</span></p>
                 </div>
         </div>
     </div>
@@ -83,7 +83,7 @@
 
             $.ajax({
                 type: "POST",
-                url: '/api/Votes',
+                url: '/api/votes',
                 data: JSON.stringify(data),
                 headers: {
                     'X-CSRF-TOKEN': antiForgeryToken
