@@ -53,7 +53,7 @@
         BookDetailsModel Details(int bookId);
         IEnumerable<BookServiceModel> ByUser(string userId, string imagePath);
         BookSearchServiceModel Filter(
-             string filterName,
+             BookDetailsModel book,
              int currentPage,
              int booksPerPage,
              string imagePath);

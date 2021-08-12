@@ -12,8 +12,8 @@
             <th scope="col">Id</th>
             <th scope="col">Book Name</th>
             <th scope="col">Author</th>
-            <th scope="col">The Book Is For</th>
-            <th scope="col">Price</th>
+            <th scope="col">The Book Is For/Price</th>
+            @*<th scope="col">Price</th>*@
             <th scope="col">Approved</th>
             <th scope="col"></th>
         </tr>
@@ -25,15 +25,15 @@
             <td scope="col">@book.Id</td>
             <td scope="col">@book.Name</td>
             <td scope="col">@book.AuthorName</td>
-            <td scope="col">@book.TheBookIsFor</td>
-            <td scope="col">@book.Price</td>
+            <td scope="col">@book.TheBookIsFor<br>@book.Price</td>
+            @*<td scope="col">@book.Price</td>*@
             <td scope="col">@(book.isPublic ? "Yes" : "No")</td>
             <td scope="col">
-                <a asp-area="" asp-controller="Books" asp-action="Details" asp-route-id="@book.Id" asp-route-information="@book.GetInformation()" class="btn btn-info btn-sm float-right ml-3">Details</a>
-                <a asp-area="" asp-controller="Books" asp-action="Edit" asp-route-id="@book.Id" class="btn btn-success btn-sm float-right ml-3">Edit</a>
-                <a asp-area="Admin" asp-controller="Books" asp-action="ChangeVisibility" asp-route-id="@book.Id" class="btn btn-primary btn-sm float-right ml-3">@(book.isPublic ? "Hide" : "Show")</a>
-                <a asp-area="" asp-controller="Books" asp-action="Delete" asp-route-id="@book.Id" class="btn btn-warning btn-sm float-right ml-3">Delete</a>
-                <a asp-area="" asp-controller="Books" asp-action="Archive" asp-route-id="@book.Id" class="btn btn-secondary btn-sm float-right ml-3  @(book.isArchived ? "disabled" : string.Empty)">@(book.isArchived ? "Archived" : "Archive")</a>
+                <a asp-area="" asp-controller="Books" asp-action="Details" asp-route-id="@book.Id" asp-route-information="@book.GetInformation()" class="btn btn-info btn-sm float-left ml-1">Details</a>
+                <a asp-area="" asp-controller="Books" asp-action="Edit" asp-route-id="@book.Id" class="btn btn-success btn-sm float-left ml-1">Edit</a>
+                <a asp-area="Admin" asp-controller="Books" asp-action="ChangeVisibility" asp-route-id="@book.Id" class="btn btn-primary btn-sm float-left ml-1">@(book.isPublic ? "Hide" : "Show")</a>
+                <a asp-area="" asp-controller="Books" asp-action="Delete" asp-route-id="@book.Id" class="btn btn-warning btn-sm float-left ml-1">Delete</a>
+                <a asp-area="" asp-controller="Books" asp-action="Archive" asp-route-id="@book.Id" class="btn btn-secondary btn-sm float-left ml-1 @(book.isArchived ? "disabled" : string.Empty)">@(book.isArchived ? "Archived" : "Archive")</a>
             </td>
         </tr>
         }

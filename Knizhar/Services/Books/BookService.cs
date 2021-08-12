@@ -165,31 +165,31 @@
                   .FirstOrDefault();
 
         public BookSearchServiceModel Filter(
-             string filterName,
+             BookDetailsModel book,
              int currentPage,
              int booksPerPage,
              string imagePath)
         {
             var booksQuery = this.data.Books.Where(b => !b.IsArchived).AsQueryable();
 
-            if (this.data.Genres.Any(g => g.Name == filterName))
+            if (this.data.Genres.Any(g => g.Name == book.GenreName))
             {
-                booksQuery = booksQuery.Where(b => b.Genre.Name == filterName);
+                booksQuery = booksQuery.Where(b => b.Genre.Name == book.GenreName);
             }
 
-            if (this.data.Towns.Any(t => t.Name == filterName))
+            if (this.data.Towns.Any(t => t.Name == book.TownName))
             {
-                booksQuery = booksQuery.Where(b => b.Knizhar.Town.Name == filterName);
+                booksQuery = booksQuery.Where(b => b.Knizhar.Town.Name == book.TownName);
             }
 
-            if (this.data.Languages.Any(l => l.LanguageName == filterName))
+            if (this.data.Languages.Any(l => l.LanguageName == book.LanguageName))
             {
-                booksQuery = booksQuery.Where(b => b.Language.LanguageName == filterName);
+                booksQuery = booksQuery.Where(b => b.Language.LanguageName == book.LanguageName);
             }
 
-            if (this.data.Authors.Any(a => a.Name == filterName))
+            if (this.data.Authors.Any(a => a.Name == book.AuthorName))
             {
-                booksQuery = booksQuery.Where(b => b.Author.Name == filterName);
+                booksQuery = booksQuery.Where(b => b.Author.Name == book.AuthorName);
             }
 
             var totalBooks = booksQuery.Count();

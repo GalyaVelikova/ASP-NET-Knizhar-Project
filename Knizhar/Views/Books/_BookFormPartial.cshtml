@@ -6,8 +6,8 @@
             @ViewBag.Title
         </h4>
         <h6 class="font-weight-normal">Please, fill in the fields below in order to add your books.</h6>
-        <form method="post" enctype="multipart/form-data">
-            <div class="form-group" >
+        <form method="post" id="bookForm" enctype="multipart/form-data">
+            <div class="form-group">
                 <div class="col-sm-10">
                     <input asp-for="Isbn" class="form-control" placeholder="* ISBN number of the book:">
                     <p class="font-weight-light"> International Standard Book Number printed on the back cover or on the first page of the book. Enter the digits without space between them and without dashes or intervals.</p>
@@ -28,7 +28,7 @@
             </div>
             <div class="form-group">
                 <div class="col-sm-10">
-                    <label asp-for="Image" class="col-sm-2 col-form-label">Picture of the cover of the book.</label>
+                    <label asp-for="Image" class="col-sm-2 col-form-label">Picture</label>
                     <input asp-for="Image" class="form-control" placeholder="* //TO BE MADE FOR UPLOADING AN IMAGE">
                     <span asp-validation-for="Image" class="small text-danger"></span>
                 </div>
@@ -50,8 +50,8 @@
                         }
                     </select>
                 </div>
-                    <span asp-validation-for="GenreId" class="small text-danger"></span>
-                </div>
+                <span asp-validation-for="GenreId" class="small text-danger"></span>
+            </div>
             <div class="form-group">
                 <label asp-for="LanguageId" class="col-sm-2 col-form-label"></label>
                 <div class="col-sm-10">
@@ -62,49 +62,67 @@
                         }
                     </select>
                 </div>
-                    <span asp-validation-for="LanguageId" class="small text-danger"></span>
+                <span asp-validation-for="LanguageId" class="small text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ConditionId" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-10">
+                    <select asp-for="ConditionId" class="form-control">
+                        @foreach (var condition in Model.Conditions)
+                        {
+                            <option value="@condition.Id">@condition.Name</option>
+                        }
+                    </select>
                 </div>
-                <div class="form-group">
-                    <label asp-for="ConditionId" class="col-sm-2 col-form-label"></label>
-                    <div class="col-sm-10">
-                        <select asp-for="ConditionId" class="form-control">
-                            @foreach (var condition in Model.Conditions)
-                            {
-                                <option value="@condition.Id">@condition.Name</option>
-                            }
-                        </select>
-                    </div>
-                        <span asp-validation-for="ConditionId" class="small text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-sm-10">
-                            <textarea asp-for="Comment" rows="3" class="form-control" placeholder="* If condition is not 'Excellent', provide some information regarding comments on the condition of the book..."></textarea>
-                            <span asp-validation-for="Comment" class="small text-danger"></span>
-                        </div>
-                    </div>
-                    <div class="form-check">
-                        <div>
-                            Tick the box below if you would like to give the book away.
-                        </div>
-                        <input asp-for="IsForGiveAway" class="form-check-input position-static" type="checkbox">
-                    </div>
-                    <div class="form-group">
-                        <p class="font-weight-light">
-                            If you would like to offer the book for sale as well as for exchange, please list the price in the field below. Offering the book for sale does not mean that it can not be exchanged.
-                        </p>
-                        <div class="col-sm-10">
-                            <label>
-                                <input asp-for="Price" class="col-xl-4 form-horizontal" placeholder="00.00"> BGN
-                            </label>
-                            <span asp-validation-for="Price" class="small text-danger"></span>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <div class="col-sm-10">
-                            <button type="submit" class="btn btn-primary" value="Save">Add</button>
-                        </div>
-                    </div>
-</form>
+                <span asp-validation-for="ConditionId" class="small text-danger"></span>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-10">
+                    <textarea asp-for="Comment" rows="3" class="form-control" placeholder="* If condition is not 'Excellent', provide some information regarding comments on the condition of the book..."></textarea>
+                    <span asp-validation-for="Comment" class="small text-danger"></span>
+                </div>
+            </div>
+            <div class="form-check">
+                <div>
+                    Tick the box below if you would like to give the book away.
+                </div>
+                <input asp-for="IsForGiveAway" class="form-check-input position-static" type="checkbox">
+            </div>
+            <div class="form-group">
+                <p class="font-weight-light">
+                    If you would like to offer the book for sale as well as for exchange, please list the price in the field below. Offering the book for sale does not mean that it can not be exchanged.
+                </p>
+                <div class="col-sm-10">
+                    <label>
+                        <input asp-for="Price" class="col-xl-4 form-horizontal" placeholder="00.00"> BGN
+                    </label>
+                    <span asp-validation-for="Price" class="small text-danger"></span>
+                </div>
+            </div>
+        </form>
     </div>
 </div>
-
+<div class="row">
+    <div class="col-sm-10 text-center">
+        <button type="submit" class="btn btn-primary" data-toggle="modal" data-target="#modalConfirmation" value="Save">Save</button>
+    </div>
+</div>
+<div class="modal fade" id="modalConfirmation" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Confirm provided information for the book</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Please, confirm that you would like to save the information.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="bookForm.submit()">Save information</button>
+            </div>
+        </div>
+    </div>
+</div>

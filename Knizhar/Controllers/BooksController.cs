@@ -151,14 +151,14 @@
             return View(book);
         }
 
-        public IActionResult Filter([FromQuery] string filterName, BookDetailsModel book)
+        public IActionResult Filter(BookDetailsModel book)
         {
             string imagePath = $"{this.environment.WebRootPath}/images";
             var currentPage = book.CurrentPage;
             var booksPerPage = BookDetailsModel.BooksPerPage;
 
             var filterResult = this.books.Filter(
-                filterName,
+                book,
                 currentPage,
                 booksPerPage,
                 imagePath);

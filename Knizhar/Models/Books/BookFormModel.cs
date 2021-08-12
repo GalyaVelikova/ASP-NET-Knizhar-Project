@@ -11,7 +11,7 @@
     public class BookFormModel : IBookModel
     {
         [Required]
-        [IsbnValidationAttribute]
+        [IsbnValidation]
         public string Isbn { get; init; }
 
         [Required]
