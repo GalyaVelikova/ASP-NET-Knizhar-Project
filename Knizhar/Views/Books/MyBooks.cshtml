@@ -1,13 +1,14 @@
-﻿@model IEnumerable<BookServiceModel>
+﻿@model BookSearchServiceModel
 
 @{
     ViewBag.Title = "Home Page";
     ViewBag.AllowBookEdit = true;
 }
 
-@if (!Model.Any())
+@if (!Model.Books.Any())
 {
     <h2 class="text-center">You do not have any books yet.</h2>
 }
 
-<partial name="_BooksPartial" model="@Model" />
+<partial name="_BooksPartial" model="@Model.Books" />
+<partial name="_PagingPartial" model="@Model" />

@@ -93,12 +93,37 @@
             };
         }
 
+
+        public BookSearchServiceModel MyBooks(
+             int currentPage,
+             int booksPerPage,
+             string userId, 
+             string imagePath)
+        {
+
+            var booksByUser = GetBooks(this.data
+               .Books
+               .Where(b => b.Knizhar.UserId == userId)
+               .Skip((currentPage - 1) * booksPerPage)
+               .Take(booksPerPage),
+               imagePath);
+
+            var totalBooks = booksByUser.Count();
+
+            return new BookSearchServiceModel
+            {
+                TotalBooks = totalBooks,
+                CurrentPage = currentPage,
+                Books = booksByUser
+            };
+        }
         public IEnumerable<BookServiceModel> ByUser(string userId, string imagePath)
         {
 
             var booksByUser = GetBooks(this.data
                 .Books
-                .Where(b => b.Knizhar.UserId == userId), imagePath);
+                .Where(b => b.Knizhar.UserId == userId), 
+                imagePath);
 
             return booksByUser;
         }
@@ -373,7 +398,5 @@
             return false;
 
         }
-
-
     }
 }

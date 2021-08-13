@@ -130,11 +130,15 @@
         }
 
         [Authorize]
-        public IActionResult MyBooks()
+        public IActionResult MyBooks(BookSearchViewModel bookModel)
         {
             string imagePath = $"{this.environment.WebRootPath}/images";
 
-            var myBooks = this.books.ByUser(this.User.Id(), imagePath);
+            var myBooks = this.books.MyBooks(
+                bookModel.CurrentPage,
+                BookSearchViewModel.BooksPerPage,
+                this.User.Id(), 
+                imagePath);
 
             return View(myBooks);
         }
