@@ -1,5 +1,6 @@
 ﻿@model IEnumerable<BookServiceModel>
 
+
 <div class="row" id="carousel">
     @foreach (var book in Model)
     {
@@ -23,13 +24,16 @@
                         <p class="font-weight-light font-weight-bold text-secondary">@book.TheBookIsFor</p>
                     }
                 </div>
-                @if (ViewBag.AllowBookEdit == true || User.IsAdmin())
+                @if ((ViewBag.AllowBookEdit == true || User.IsAdmin()) && @book.isArchived)
                 {
-                    <a asp-controller="Books" asp-action="Edit" asp-route-id="@book.Id" class="btn btn-success btn-sm @(book.isArchived ? "disabled" : string.Empty)">Edit</a>
-                    <a asp-controller="Books" asp-action="Delete" asp-route-id="@book.Id" class="btn btn-warning btn-sm">Delete</a>
-                    <a asp-controller="Books" asp-action="Archive" asp-route-id="@book.Id" class="btn btn-secondary btn-sm @(book.isArchived ? "disabled" : string.Empty)">@(book.isArchived ? "Archived" : "Archive")</a>
+                    <p class="font-weight-light font-weight-bold text-secondary text-center text-danger">Archived</p>
                 }
             </div>
         </div>
     }
 </div>
+
+
+
+
+

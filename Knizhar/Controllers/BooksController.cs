@@ -142,7 +142,7 @@
         public IActionResult Details(int id, string information)
         {
 
-            var book = this.books.Details(id);
+            var book = this.books.Details(id); 
 
             if (information != book.GetInformation())
             {
@@ -255,7 +255,7 @@
             return RedirectToAction(nameof(Details), new { id, information = book.GetInformation() });
         }
 
-        
+        [HttpPost]
         [Authorize]
         public IActionResult Delete(int id)
         {
@@ -283,6 +283,7 @@
             return RedirectToAction(nameof(MyBooks));
         }
 
+        [HttpPost]
         [Authorize]
         public IActionResult Archive(int id)
         {

@@ -34,7 +34,7 @@
             string searchTerm = null,
             BookSorting sorting = BookSorting.Newest,
             int currentPage = 1,
-            int booksPerPage = int.MaxValue,
+            int booksPerPage = 8,
             bool publicOnly = true)
         {
             var booksQuery = this.data.Books
@@ -190,6 +190,11 @@
             if (this.data.Authors.Any(a => a.Name == book.AuthorName))
             {
                 booksQuery = booksQuery.Where(b => b.Author.Name == book.AuthorName);
+            }
+
+            if (this.data.Knizhari.Any(k => k.UserName == book.KnizharName))
+            {
+                booksQuery = booksQuery.Where(b => b.Knizhar.UserName == book.KnizharName);
             }
 
             var totalBooks = booksQuery.Count();
@@ -368,5 +373,7 @@
             return false;
 
         }
+
+
     }
 }

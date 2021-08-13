@@ -1,9 +1,13 @@
-﻿namespace Knizhar.Services.Books.Models
+﻿using System.Collections.Generic;
+
+namespace Knizhar.Services.Books.Models
 {
     public class BookDetailsModel:IBookModel
     {
         public const int BooksPerPage = 5;
         public int CurrentPage { get; init; } = 1;
+
+        public int TotalBooks { get; set; }
         public int Id { get; init; }
         public string Name { get; init; }
 
@@ -37,6 +41,10 @@
         public double AverageVote { get; set; }
 
         public int TotalVotes { get; set; }
+
+        public bool isArchived { get; set; }
+
+        public IEnumerable<BookServiceModel> Books { get; set; }
     }
 
 }

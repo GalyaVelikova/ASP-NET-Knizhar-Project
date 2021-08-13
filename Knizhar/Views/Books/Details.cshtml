@@ -1,79 +1,125 @@
 ﻿@model BookDetailsModel
+@using Knizhar.Data.Models
+@using Microsoft.AspNetCore.Identity
+@using Knizhar.Services.Knizhari
 
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+@inject IKnizharService Knizhari
 
 @{
     ViewBag.Title = "Home Page";
+
+    var userId = User.Id();
+    var userIsAdmin = User.IsAdmin();
+
+    if (User.Identity.IsAuthenticated && (userIsAdmin || userId == Model.UserId))
+    {
+        ViewBag.AllowBookEdit = true;
+    }
+    else
+    {
+        ViewBag.AllowBookEdit = false;
+    }
+
 }
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
-        <li class="breadcrumb-item"><a @*asp-controller="Home" asp-action="Index"*@>@Model.AuthorName</a></li>
-        <li class="breadcrumb-item active" aria-current="page">@*<a asp-controller="Books" asp-action="Index">*@@Model.GenreName</li>
+        <li class="breadcrumb-item"><a asp-controller="Books" asp-action="Filter" asp-route-authorName="@Model.AuthorName">@Model.AuthorName</a></li>
+        <li class="breadcrumb-item active" aria-current="page"><a asp-action="Filter" asp-route-genreName="@Model.GenreName">@Model.GenreName</a></li>
     </ol>
 </nav>
-    @*<div class="row">
-            <div>
-            <img class="mr-3 resp-img mt-3 w-25 p-3" src="@Model.ImagePath" alt="Generic placeholder image">
-            </div>
-            <div>
-                <h4 itemprop="name" class="mt-3">@Model.Name</h4>
-                <ul class="desc-info-book">
-                    <li>Автор: <span itemprop="author" style="float:right;" itemscope="" itemtype="http://schema.org/Person"><a href="/%D0%9C%D0%B0%D0%BD%D1%83%D0%B5%D0%BB%D0%B0+%D0%98%D0%BD%D1%83%D1%81%D0%B0-s"><span itemprop="name">Мануела Инуса</span></a></span></li>
-                    <li>ISBN:	<span itemprop="isbn" style="float:right;">9789542619536</span></li>
-                    <li>Език:	<a href="/balgarski-1-lang"><span itemprop="inLanguage" style="float:right;">български</span></a></li>
-                    <li>Категория: <a href="/hudozhestvena-literatura-6-genre"><span itemprop="genre" style="float:right;">Художествена литература</span></a></li>
-                    <li>Книгата се намира в <a href="/karnobat-206-city" target="_blank" style="float:right;">Карнобат</a></li>
-                    <li>
-                        Книгата се
-
-                        <span class="price-free" style="float:right;">РАЗМЕНЯ</span>
-
-                    </li>
-
-                    <li><div itemprop="offers" itemscope="" itemtype="http://schema.org/Offer">Потребителят би я продал за <span class="price-desc" style="float:right;"><span itemprop="price">8</span><span itemprop="priceCurrency" content="BGN">лв</span></span></div></li>
-
-                </ul>
-            </div>
-        </div>
-        </div>*@
-    <div >
-
-            <div class="media">
-                <img img class="mr-3 resp-img mt-3 w-25 p-3 col-3" src="@Model.ImagePath" alt="Generic placeholder image">
-                <div class="media-body col-4 mt-3">
-                    <h4 itemprop="name" class="desc-title">@Model.Name</h4>
-                    <ul class="desc-info-book">
-                        <li>Author: <span itemprop="author" style="float:right;" itemscope="" itemtype="http://schema.org/Person"><a asp-controller="Books" asp-action="Filter" asp-route-authorName="@Model.AuthorName"><span itemprop="name">@Model.AuthorName</span></a></span></li>
-                        <li>ISBN:	<span itemprop="isbn" style="float:right;">@Model.Isbn</span></li>
-                        <li>Language:	<a asp-controller="Books" asp-action="Filter" asp-route-languageName="@Model.LanguageName"><span itemprop="inLanguage" style="float:right;">@Model.LanguageName</span></a></li>
-                        <li>Genre: <a asp-controller="Books" asp-action="Filter" asp-route-genreName="@Model.GenreName"><span itemprop="genre" style="float:right;">@Model.GenreName</span></a></li>
-                        <li>The book is located in: <a asp-controller="Books" asp-action="Filter" asp-route-townName="@Model.TownName" target="_blank" style="float:right;">@Model.TownName</a></li>
-                        <li>
-                            The book is for
-                            <span class="price-free" style="float:right;">@Model.TheBookIsFor</span>
-                        </li>
-                        <li><div itemprop="offers" itemscope="" itemtype="http://schema.org/Offer">The Knizhar would sell it for<span class="price-desc" style="float:right;"><span itemprop="price">@Model.Price</span><span itemprop="priceCurrency" content="BGN">BGN</span></span></div></li>
-                    </ul>
-                    <h4 itemprop="name" class="desc-title">Knizhar Information</h4>
-                    <ul class="desc-info-book">
-                        <li>Name: <a @*asp-controller="Books" asp-action="Filter" asp-route-genreName="@Model.GenreName"*@><span itemprop="genre" style="float:right;">@Model.KnizharName</span></a></li>
-                        <li>Town: <a asp-controller="Books" asp-action="Filter" asp-route-townName="@Model.TownName" target="_blank" style="float:right;">@Model.TownName</a></li>
-                    </ul>
-                    <h6 class="heading">User Rating</h6>
-                    <ul>
-                        <li class="fa fa-star" id="rating" data-vote="1"></li>
-                        <li class="fa fa-star" id="rating" data-vote="2"></li>
-                        <li class="fa fa-star" id="rating" data-vote="3"></li>
-                        <li class="fa fa-star" id="rating" data-vote="4"></li>
-                        <li class="fa fa-star" id="rating" data-vote="5"></li>
-                    </ul>
-                    <p id="averageVoteValue"> @Model.AverageVote.ToString("0.0")<span> average based on @Model.TotalVotes reviews.</span></p>
-                </div>
+<div>
+    <div class="media">
+        <img img class="mr-3 resp-img mt-3 w-25 p-3 col-3" src="@Model.ImagePath" alt="Generic placeholder image">
+        <div class="media-body col-4 mt-3">
+            <h4 itemprop="name" class="desc-title">@Model.Name</h4>
+            <ul class="desc-info-book">
+                <li>Author: <span itemprop="author" style="float:right;" itemscope="" itemtype="http://schema.org/Person"><a asp-controller="Books" asp-action="Filter" asp-route-authorName="@Model.AuthorName"><span itemprop="name">@Model.AuthorName</span></a></span></li>
+                <li>ISBN:	<span itemprop="isbn" style="float:right;">@Model.Isbn</span></li>
+                <li>Language:	<a asp-controller="Books" asp-action="Filter" asp-route-languageName="@Model.LanguageName"><span itemprop="inLanguage" style="float:right;">@Model.LanguageName</span></a></li>
+                <li>Genre: <a asp-controller="Books" asp-action="Filter" asp-route-genreName="@Model.GenreName"><span itemprop="genre" style="float:right;">@Model.GenreName</span></a></li>
+                <li>The book is located in: <a asp-controller="Books" asp-action="Filter" asp-route-townName="@Model.TownName" target="_blank" style="float:right;">@Model.TownName</a></li>
+                <li>
+                    The book is for
+                    <span class="price-free" style="float:right;">@Model.TheBookIsFor</span>
+                </li>
+                @if (Model.TheBookIsFor == "Exchange")
+                {
+                    <li><div itemprop="offers" itemscope="" itemtype="http://schema.org/Offer">The Knizhar would sell it for<span class="price-desc" style="float:right;"><span itemprop="price">@Model.Price</span><span itemprop="priceCurrency" content="BGN">BGN</span></span></div></li>
+                }
+            </ul>
+            <h4 itemprop="name" class="desc-title">Knizhar Information</h4>
+            <ul class="desc-info-book">
+                <li>Name: <a asp-controller="Books" asp-action="Filter" asp-route-knizharName="@Model.KnizharName"><span itemprop="genre" style="float:right;">@Model.KnizharName</span></a></li>
+                <li>Town: <a asp-controller="Books" asp-action="Filter" asp-route-townName="@Model.TownName" target="_blank" style="float:right;">@Model.TownName</a></li>
+            </ul>
+            <h6 class="heading">User Rating</h6>
+            <ul>
+                <li class="fa fa-star" id="rating" data-vote="1"></li>
+                <li class="fa fa-star" id="rating" data-vote="2"></li>
+                <li class="fa fa-star" id="rating" data-vote="3"></li>
+                <li class="fa fa-star" id="rating" data-vote="4"></li>
+                <li class="fa fa-star" id="rating" data-vote="5"></li>
+            </ul>
+            <p id="averageVoteValue"> @Model.AverageVote.ToString("0.0")<span> average based on @Model.TotalVotes reviews.</span></p>
         </div>
     </div>
+</div>
+@if (ViewBag.AllowBookEdit)
+{
+    <a asp-controller="Books" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-success btn-sm @(Model.isArchived ? "disabled" : string.Empty)">Edit</a>
+    <a data-toggle="modal" data-target="#modalDelete" asp-controller="Books" asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-warning btn-sm">Delete</a>
+    <a data-toggle="modal" data-target="#modalArchive" asp-controller="Books" asp-action="Archive" asp-route-id="@Model.Id" class="btn btn-secondary btn-sm @(Model.isArchived ? "disabled" : string.Empty)">@(Model.isArchived ? "Archived" : "Archive")</a>
+}
+<form method="post">
+    <div class="modal fade" id="modalDelete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Confirm provided information for the book</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Please, confirm that you would like to delete the book.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">No</button>
+                    <button type="submit" asp-controller="Books" asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger">Yes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<form method="post">
+    <div class="modal fade" id="modalArchive" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Confirm provided information for the book</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Please, confirm that you would like to archive the book.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">No</button>
+                    <button type="submit" asp-controller="Books" asp-action="Archive" asp-route-id="@Model.Id" class="btn btn-danger">Yes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
 <form method="post" id="antiforgeryForm"></form>
-@section Scripts{ 
-<script>
+@section Scripts{
+    <script>
     $("li[data-vote]").each(function (el) {
         $(this).click(function () {
             var value = $(this).attr("data-vote");
@@ -95,5 +141,5 @@
             });
         })
     })
- </script>
+    </script>
 }
