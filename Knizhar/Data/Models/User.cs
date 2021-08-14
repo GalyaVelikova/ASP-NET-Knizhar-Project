@@ -12,5 +12,7 @@ namespace Knizhar.Data.Models
         public string FullName { get; set; }
 
         public IList<Vote> Votes { get; set; } = new List<Vote>();
+
+        public IList<Book> FavouriteBooks { get; set; } = new List<Book>();
     }
 }

@@ -97,7 +97,7 @@
         public BookSearchServiceModel MyBooks(
              int currentPage,
              int booksPerPage,
-             string userId, 
+             string userId,
              string imagePath)
         {
 
@@ -122,7 +122,7 @@
 
             var booksByUser = GetBooks(this.data
                 .Books
-                .Where(b => b.Knizhar.UserId == userId), 
+                .Where(b => b.Knizhar.UserId == userId),
                 imagePath);
 
             return booksByUser;
@@ -165,7 +165,7 @@
                     .ToList();
 
         public BookDetailsModel Details(int id)
-            =>this.data
+            => this.data
                   .Books
                   .Where(b => b.Id == id)
                   .ProjectTo<BookDetailsModel>(this.mapper)
@@ -305,16 +305,16 @@
         }
 
         public bool Edit(
-            int id, 
-            string isbn, 
-            string name, 
-            int genreId, 
-            int languageId, 
-            int conditionId, 
-            string description, 
-            int author, 
-            string comment, 
-            bool isForGiveAway, 
+            int id,
+            string isbn,
+            string name,
+            int genreId,
+            int languageId,
+            int conditionId,
+            string description,
+            int author,
+            string comment,
+            bool isForGiveAway,
             decimal price,
             bool isPublic)
         {
@@ -362,7 +362,7 @@
         }
 
         public List<BookServiceModel> Latest()
-            =>this.data
+            => this.data
                 .Books
                 .Where(b => b.IsPublic && !b.IsArchived)
                 .OrderByDescending(b => b.AddedOn)
@@ -398,5 +398,78 @@
             return false;
 
         }
+
+        public bool FavouriteBook(int bookId, string userId)
+        {
+            var book = this.data.Books.FirstOrDefault(b => b.Id == bookId);
+
+            if (book == null)
+            {
+                return false;
+            }
+
+            if (IsFavouriteBook(bookId, userId))
+            {
+                var bookToRemove = this.data.FavouriteBooks.FirstOrDefault(b => b.BookId == bookId && b.UserId == userId);
+                this.data.FavouriteBooks.Remove(bookToRemove);
+                this.data.SaveChanges();
+
+                return true;
+            }
+
+            var favouriteBook = new FavouriteBook
+            {
+                BookId = bookId,
+                UserId = userId
+            };
+
+            this.data.FavouriteBooks.Add(favouriteBook);
+            this.data.SaveChanges();
+
+            return true;
+
+        }
+
+        public bool IsFavouriteBook(int bookId, string userId)
+            => this.data.
+               FavouriteBooks
+               .Any(b => b.BookId == bookId && b.UserId == userId);
+
+        public BookSearchServiceModel GetFavouriteBooks(
+            string userId,
+            int currentPage,
+            int booksPerPage,
+            string imagePath)
+        {
+            var favouriteBooks = this.data.FavouriteBooks.Where(b => b.UserId == userId).AsQueryable();
+
+            var totalBooks = favouriteBooks.Count();
+
+            var books = GetFavouriteBooks(favouriteBooks
+                .Skip((currentPage - 1) * booksPerPage)
+                .Take(booksPerPage), imagePath);
+
+            return new BookSearchServiceModel
+            {
+                TotalBooks = totalBooks,
+                CurrentPage = currentPage,
+                Books = books,
+            };
+        }
+
+        private IEnumerable<BookServiceModel> GetFavouriteBooks(IQueryable<FavouriteBook> favouriteBookQuery, string imagePath)
+           => favouriteBookQuery
+               .Select( fb => new BookServiceModel
+               {
+                   Id = fb.Book.Id,
+                   Name = fb.Book.Name,
+                   ImagePath = imagePath,
+                   AuthorName = fb.Book.Author.Name,
+                   TheBookIsFor = fb.Book.IsForGiveAway ? "Give away" : "Exchange",
+                   Price = fb.Book.Price,
+                   isArchived = fb.Book.IsArchived,
+                   isPublic = fb.Book.IsPublic
+               })
+               .ToList();
     }
 }

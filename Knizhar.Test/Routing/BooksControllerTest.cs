@@ -22,12 +22,12 @@
                 .ShouldMap("/Books/All")
                 .To<BooksController>(c => c.All(With.Any<BookSearchViewModel>()));
 
-        [Fact]
-        public void MyBooksRouteShouldBeMapped()
-            => MyRouting
-                .Configuration()
-                .ShouldMap("/Books/MyBooks")
-                .To<BooksController>(c => c.MyBooks());
+        //[Fact]
+        //public void MyBooksRouteShouldBeMapped()
+        //    => MyRouting
+        //        .Configuration()
+        //        .ShouldMap("/Books/MyBooks")
+        //        .To<BooksController>(c => c.MyBooks());
 
         [Theory]
         [InlineData(1, "BookName-AuthorName")]

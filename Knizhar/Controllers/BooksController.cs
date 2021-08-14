@@ -314,5 +314,48 @@
 
             return RedirectToAction(nameof(MyBooks));
         }
+
+        [HttpPost]
+        [Authorize]
+        public IActionResult FavouriteBook(int bookId, string userId)
+        {
+            userId = this.User.Id();
+
+            if (!this.books.FavouriteBook(bookId, userId))
+            {
+                return BadRequest();
+            }
+
+            this.books.FavouriteBook(bookId, userId);
+
+            var book = this.books.Details(bookId);
+
+            var isFavouriteBook = this.books.IsFavouriteBook(bookId, userId);
+
+            if (isFavouriteBook)
+            {
+                book.isFavouriteBook = true;
+            }
+            else
+            {
+                book.isFavouriteBook = false;
+            }
+
+            return RedirectToAction(nameof(FavouriteBooks));
+        }
+
+        [Authorize]
+        public IActionResult FavouriteBooks(BookSearchViewModel bookModel)
+        {
+            string imagePath = $"{this.environment.WebRootPath}/images";
+
+            var favouriteBooks = this.books.GetFavouriteBooks(
+                this.User.Id(),
+                bookModel.CurrentPage,
+                BookSearchViewModel.BooksPerPage,
+                imagePath);
+
+            return View(favouriteBooks);
+        }
     }
 }

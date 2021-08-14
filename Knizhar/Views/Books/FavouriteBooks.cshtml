@@ -1,0 +1,17 @@
+﻿@model BookSearchServiceModel
+
+@{
+    ViewBag.Title = "Home Page";
+    ViewBag.AllowBookEdit = false;
+}
+
+@if (!Model.Books.Any())
+{
+    <h2 class="text-center">You do not have any favourite books yet.</h2>
+}
+else
+{
+    <partial name="_BooksPartial" model="@Model.Books" />
+    <partial name="_PagingPartial" model="@Model" />
+
+}

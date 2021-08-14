@@ -4,14 +4,16 @@ using Knizhar.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Knizhar.Migrations
 {
     [DbContext(typeof(KnizharDbContext))]
-    partial class KnizharDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210814150657_ChangesNameOfTableFavouriteBook")]
+    partial class ChangesNameOfTableFavouriteBook
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

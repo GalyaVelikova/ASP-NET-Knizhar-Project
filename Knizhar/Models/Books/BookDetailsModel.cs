@@ -44,6 +44,7 @@ namespace Knizhar.Services.Books.Models
 
         public bool isArchived { get; set; }
 
+        public bool isFavouriteBook { get; set; }
         public IEnumerable<BookServiceModel> Books { get; set; }
     }
 

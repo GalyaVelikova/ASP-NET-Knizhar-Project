@@ -31,8 +31,7 @@
                 .ForMember(b => b.KnizharName, cfg => cfg.MapFrom(b => b.Knizhar.UserName))
                 .ForMember(b => b.ImagePath, cfg => cfg.MapFrom(b => "/images/books/" + b.Image.Id + "." + b.Image.Extension))
                 .ForMember(b => b.TheBookIsFor, opt => opt.MapFrom(src => src.IsForGiveAway ? "Give away" : "Exchange"))
-                .ForMember(b => b.AverageVote, opt => opt.MapFrom(src => src.Knizhar.Votes.Count() !=0 ? src.Knizhar.Votes.Average(v => v.VoteValue) : 0))
-                .ForMember(b => b.TotalVotes, opt => opt.MapFrom(src => src.Knizhar.Votes.Count())); 
+                .ForMember(b => b.AverageVote, opt => opt.MapFrom(src => src.Knizhar.Votes.Count() !=0 ? src.Knizhar.Votes.Average(v => v.VoteValue) : 0)); 
         }
     }
 }

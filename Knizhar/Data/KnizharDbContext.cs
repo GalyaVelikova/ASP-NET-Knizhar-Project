@@ -27,6 +27,8 @@
         public DbSet<Image> Images { get; init; }
         public DbSet<Vote> Votes { get; init; }
 
+        public DbSet<FavouriteBook> FavouriteBooks { get; init; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -94,6 +96,11 @@
                .WithMany(u => u.Votes)
                .HasForeignKey(v => v.KnizharId)
                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<FavouriteBook>(entity =>
+            {
+                entity.HasKey(fb => new { fb.BookId, fb.UserId });
+            });
         }
     }
 }

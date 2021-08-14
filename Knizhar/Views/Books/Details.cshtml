@@ -11,17 +11,19 @@
     ViewBag.Title = "Home Page";
 
 
-    if (User.Identity.IsAuthenticated )
+    if (User.Identity.IsAuthenticated)
     {
         var userId = User.Id();
         var userIsAdmin = User.IsAdmin();
 
-        if ((userIsAdmin || userId == Model.UserId))
+        if ((userId == Model.UserId || userIsAdmin))
         {
             ViewBag.AllowBookEdit = true;
         }
-
-        ViewBag.AllowBookEdit = false;
+        else
+        {
+            ViewBag.AllowBookEdit = false;
+        }
 
     }
     else
@@ -70,7 +72,7 @@
                 <li class="fa fa-star" id="rating" data-vote="4"></li>
                 <li class="fa fa-star" id="rating" data-vote="5"></li>
             </ul>
-            <p id="averageVoteValue"> @Model.AverageVote.ToString("0.0")<span> average based on @Model.TotalVotes reviews.</span></p>
+            <span id="averageVoteValue"> @Model.AverageVote.ToString("0.0")</span><span> average based on @Model.TotalVotes reviews.</span>
         </div>
     </div>
 </div>
@@ -79,6 +81,12 @@
     <a asp-controller="Books" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-success btn-sm @(Model.isArchived ? "disabled" : string.Empty)">Edit</a>
     <a data-toggle="modal" data-target="#modalDelete" asp-controller="Books" asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-warning btn-sm">Delete</a>
     <a data-toggle="modal" data-target="#modalArchive" asp-controller="Books" asp-action="Archive" asp-route-id="@Model.Id" class="btn btn-secondary btn-sm @(Model.isArchived ? "disabled" : string.Empty)">@(Model.isArchived ? "Archived" : "Archive")</a>
+}
+else
+{
+    <form method="post">
+        <button type="submit" asp-controller="Books" asp-action="FavouriteBook" asp-route-id="@Model.Id" class="btn btn-danger">@(Model.isFavouriteBook ? "Remove from Favourites" : "Add to Favourites")</button>
+    </form>
 }
 <form method="post">
     <div class="modal fade" id="modalDelete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -132,7 +140,7 @@
             var value = $(this).attr("data-vote");
             var knizharId = @Model.KnizharId;
             var antiForgeryToken = $('#antiforgeryForm input[name=__RequestVerificationToken]').val();
-            var data = { knizharId: knizharId, value: value };
+            var data = { knizharId: knizharId, value: value};
 
             $.ajax({
                 type: "POST",

@@ -1,6 +1,7 @@
 ﻿namespace Knizhar.Data.Models
 {
     using System;
+    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using static DataConstants.Book;
     public class Book
@@ -55,8 +56,6 @@
 
         public bool IsPublic { get; set; }
 
-       //public IEnumerable<ApplicationUser> UsersFavouriteBooks { get; init; } = new List<ApplicationUser>();
-
-        //public ICollection<ApplicationUser> Users { get; init; } = new List<ApplicationUser>();
+       public IList<User> UserFavouriteBooks { get; init; } = new List<User>();
     }
 }

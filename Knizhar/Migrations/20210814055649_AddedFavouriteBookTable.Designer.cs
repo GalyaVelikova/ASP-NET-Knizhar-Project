@@ -4,14 +4,16 @@ using Knizhar.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Knizhar.Migrations
 {
     [DbContext(typeof(KnizharDbContext))]
-    partial class KnizharDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210814055649_AddedFavouriteBookTable")]
+    partial class AddedFavouriteBookTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -24,12 +26,12 @@ namespace Knizhar.Migrations
                     b.Property<int>("FavouriteBooksId")
                         .HasColumnType("int");
 
-                    b.Property<string>("UserFavouriteBooksId")
+                    b.Property<string>("FavouriteBooksId1")
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("FavouriteBooksId", "UserFavouriteBooksId");
+                    b.HasKey("FavouriteBooksId", "FavouriteBooksId1");
 
-                    b.HasIndex("UserFavouriteBooksId");
+                    b.HasIndex("FavouriteBooksId1");
 
                     b.ToTable("BookUser");
                 });
@@ -148,7 +150,7 @@ namespace Knizhar.Migrations
                     b.ToTable("Conditions");
                 });
 
-            modelBuilder.Entity("Knizhar.Data.Models.FavouriteBook", b =>
+            modelBuilder.Entity("Knizhar.Data.Models.FavouriteBooks", b =>
                 {
                     b.Property<int>("BookId")
                         .HasColumnType("int");
@@ -504,7 +506,7 @@ namespace Knizhar.Migrations
 
                     b.HasOne("Knizhar.Data.Models.User", null)
                         .WithMany()
-                        .HasForeignKey("UserFavouriteBooksId")
+                        .HasForeignKey("FavouriteBooksId1")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -560,7 +562,7 @@ namespace Knizhar.Migrations
                     b.Navigation("Language");
                 });
 
-            modelBuilder.Entity("Knizhar.Data.Models.FavouriteBook", b =>
+            modelBuilder.Entity("Knizhar.Data.Models.FavouriteBooks", b =>
                 {
                     b.HasOne("Knizhar.Data.Models.Book", "Book")
                         .WithMany()
