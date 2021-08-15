@@ -4,7 +4,6 @@
     using static Data.DataConstants.Condition;
     public class ConditionFormModel
     {
-        [Required]
         [StringLength(
             ConditionNameMaxLength,
             MinimumLength = ConditionNameMinLength,

@@ -1,5 +1,6 @@
 namespace Knizhar
 {
+    using Knizhar.Areas.Admin.Services;
     using Knizhar.Controllers;
     using Knizhar.Data;
     using Knizhar.Data.Models;
@@ -62,6 +63,7 @@ namespace Knizhar
             services.AddTransient<IBookService, BookService>();
             services.AddTransient<IKnizharService, KnizharService>();
             services.AddTransient<IVoteService, VoteService>();
+            services.AddTransient<ICategoriesService, CategoriesServices>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
