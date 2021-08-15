@@ -13,6 +13,9 @@ namespace Knizhar.Data.Models
 
         public IList<Vote> Votes { get; set; } = new List<Vote>();
 
-        public IList<Book> FavouriteBooks { get; set; } = new List<Book>();
+        //public int FavouriteBookId { get; set; }
+
+        //public FavouriteBook FavouriteBook { get; set; }
+        public IList<FavouriteBook> FavouriteBooks { get; set; } = new List<FavouriteBook>();
     }
 }

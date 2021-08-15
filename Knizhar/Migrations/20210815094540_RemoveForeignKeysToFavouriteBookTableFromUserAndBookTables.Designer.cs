@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Knizhar.Migrations
 {
     [DbContext(typeof(KnizharDbContext))]
-    [Migration("20210814150657_ChangesNameOfTableFavouriteBook")]
-    partial class ChangesNameOfTableFavouriteBook
+    [Migration("20210815094540_RemoveForeignKeysToFavouriteBookTableFromUserAndBookTables")]
+    partial class RemoveForeignKeysToFavouriteBookTableFromUserAndBookTables
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -20,21 +20,6 @@ namespace Knizhar.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.8")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-            modelBuilder.Entity("BookUser", b =>
-                {
-                    b.Property<int>("FavouriteBooksId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserFavouriteBooksId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("FavouriteBooksId", "UserFavouriteBooksId");
-
-                    b.HasIndex("UserFavouriteBooksId");
-
-                    b.ToTable("BookUser");
-                });
 
             modelBuilder.Entity("Knizhar.Data.Models.Author", b =>
                 {
@@ -152,13 +137,20 @@ namespace Knizhar.Migrations
 
             modelBuilder.Entity("Knizhar.Data.Models.FavouriteBook", b =>
                 {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
                     b.Property<int>("BookId")
                         .HasColumnType("int");
 
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("BookId", "UserId");
+                    b.HasKey("Id");
+
+                    b.HasIndex("BookId");
 
                     b.HasIndex("UserId");
 
@@ -496,21 +488,6 @@ namespace Knizhar.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("BookUser", b =>
-                {
-                    b.HasOne("Knizhar.Data.Models.Book", null)
-                        .WithMany()
-                        .HasForeignKey("FavouriteBooksId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Knizhar.Data.Models.User", null)
-                        .WithMany()
-                        .HasForeignKey("UserFavouriteBooksId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Knizhar.Data.Models.Book", b =>
                 {
                     b.HasOne("Knizhar.Data.Models.Author", "Author")
@@ -565,16 +542,15 @@ namespace Knizhar.Migrations
             modelBuilder.Entity("Knizhar.Data.Models.FavouriteBook", b =>
                 {
                     b.HasOne("Knizhar.Data.Models.Book", "Book")
-                        .WithMany()
+                        .WithMany("FavouriteBooks")
                         .HasForeignKey("BookId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Knizhar.Data.Models.User", "User")
-                        .WithMany()
+                        .WithMany("FavouriteBooks")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Book");
 
@@ -683,6 +659,11 @@ namespace Knizhar.Migrations
                     b.Navigation("Books");
                 });
 
+            modelBuilder.Entity("Knizhar.Data.Models.Book", b =>
+                {
+                    b.Navigation("FavouriteBooks");
+                });
+
             modelBuilder.Entity("Knizhar.Data.Models.Condition", b =>
                 {
                     b.Navigation("Books");
@@ -717,6 +698,8 @@ namespace Knizhar.Migrations
 
             modelBuilder.Entity("Knizhar.Data.Models.User", b =>
                 {
+                    b.Navigation("FavouriteBooks");
+
                     b.Navigation("Votes");
                 });
 #pragma warning restore 612, 618

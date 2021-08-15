@@ -97,10 +97,21 @@
                .HasForeignKey(v => v.KnizharId)
                .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<FavouriteBook>(entity =>
-            {
-                entity.HasKey(fb => new { fb.BookId, fb.UserId });
-            });
+            modelBuilder
+               .Entity<FavouriteBook>()
+               .HasOne(u => u.User)
+               .WithMany(b => b.FavouriteBooks)
+               .HasForeignKey(fb => fb.UserId)
+               .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder
+               .Entity<FavouriteBook>()
+               .HasOne(b => b.Book)
+               .WithMany(b => b.FavouriteBooks)
+               .HasForeignKey(fb => fb.BookId)
+               .OnDelete(DeleteBehavior.Restrict);
+
         }
+
     }
 }

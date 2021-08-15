@@ -56,6 +56,9 @@
 
         public bool IsPublic { get; set; }
 
-       public IList<User> UserFavouriteBooks { get; init; } = new List<User>();
+        //public int FavouriteBookId { get; set; }
+
+        //public FavouriteBook FavouriteBook { get; set; }
+        public IList<FavouriteBook> FavouriteBooks { get; init; } = new List<FavouriteBook>();
     }
 }

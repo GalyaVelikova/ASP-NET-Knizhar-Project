@@ -145,8 +145,10 @@
 
         public IActionResult Details(int id, string information)
         {
+            var userId = this.User.Id();
 
-            var book = this.books.Details(id); 
+            var book = this.books.Details(id);
+            book.isFavouriteBook = this.books.IsFavouriteBook(id, userId);
 
             if (information != book.GetInformation())
             {
@@ -315,33 +317,26 @@
             return RedirectToAction(nameof(MyBooks));
         }
 
-        [HttpPost]
+        
         [Authorize]
-        public IActionResult FavouriteBook(int bookId, string userId)
+        public IActionResult AddFavouriteBook(int id)
         {
-            userId = this.User.Id();
+            var userId = this.User.Id();
 
-            if (!this.books.FavouriteBook(bookId, userId))
-            {
-                return BadRequest();
-            }
+            var result = this.books.AddFavouriteBook(id, userId);
+          
+            return RedirectToAction(nameof(Details), new { id, information = result.GetInformation() });
+        }
 
-            this.books.FavouriteBook(bookId, userId);
+        
+        [Authorize]
+        public IActionResult RemoveFavouriteBook(int id)
+        {
+            var userId = this.User.Id();
 
-            var book = this.books.Details(bookId);
+            var result = this.books.RemoveFavouriteBook(id, userId);
 
-            var isFavouriteBook = this.books.IsFavouriteBook(bookId, userId);
-
-            if (isFavouriteBook)
-            {
-                book.isFavouriteBook = true;
-            }
-            else
-            {
-                book.isFavouriteBook = false;
-            }
-
-            return RedirectToAction(nameof(FavouriteBooks));
+            return RedirectToAction(nameof(Details), new { id, information = result.GetInformation() });
         }
 
         [Authorize]

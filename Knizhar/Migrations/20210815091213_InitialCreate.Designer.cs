@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Knizhar.Migrations
 {
     [DbContext(typeof(KnizharDbContext))]
-    [Migration("20210810095319_AddedVoteTable")]
-    partial class AddedVoteTable
+    [Migration("20210815091213_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -65,6 +65,12 @@ namespace Knizhar.Migrations
                     b.Property<bool>("Favourite")
                         .HasColumnType("bit");
 
+                    b.Property<int>("FavouriteBookId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("FavouriteBookId1")
+                        .HasColumnType("int");
+
                     b.Property<int>("GenreId")
                         .HasColumnType("int");
 
@@ -106,6 +112,8 @@ namespace Knizhar.Migrations
 
                     b.HasIndex("ConditionId");
 
+                    b.HasIndex("FavouriteBookId1");
+
                     b.HasIndex("GenreId");
 
                     b.HasIndex("ImageId")
@@ -133,6 +141,28 @@ namespace Knizhar.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Conditions");
+                });
+
+            modelBuilder.Entity("Knizhar.Data.Models.FavouriteBook", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("BookId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BookId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("FavouriteBooks");
                 });
 
             modelBuilder.Entity("Knizhar.Data.Models.Genre", b =>
@@ -255,6 +285,12 @@ namespace Knizhar.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<int>("FavouriteBookId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("FavouriteBookId1")
+                        .HasColumnType("int");
+
                     b.Property<string>("FullName")
                         .IsRequired()
                         .HasMaxLength(40)
@@ -294,6 +330,8 @@ namespace Knizhar.Migrations
                         .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("FavouriteBookId1");
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -480,6 +518,10 @@ namespace Knizhar.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Knizhar.Data.Models.FavouriteBook", "FavouriteBook")
+                        .WithMany()
+                        .HasForeignKey("FavouriteBookId1");
+
                     b.HasOne("Knizhar.Data.Models.Genre", "Genre")
                         .WithMany("Books")
                         .HasForeignKey("GenreId")
@@ -508,6 +550,8 @@ namespace Knizhar.Migrations
 
                     b.Navigation("Condition");
 
+                    b.Navigation("FavouriteBook");
+
                     b.Navigation("Genre");
 
                     b.Navigation("Image");
@@ -515,6 +559,24 @@ namespace Knizhar.Migrations
                     b.Navigation("Knizhar");
 
                     b.Navigation("Language");
+                });
+
+            modelBuilder.Entity("Knizhar.Data.Models.FavouriteBook", b =>
+                {
+                    b.HasOne("Knizhar.Data.Models.Book", "Book")
+                        .WithMany("FavouriteBooks")
+                        .HasForeignKey("BookId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Knizhar.Data.Models.User", "User")
+                        .WithMany("FavouriteBooks")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Book");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Knizhar.Data.Models.Image", b =>
@@ -543,6 +605,15 @@ namespace Knizhar.Migrations
                         .IsRequired();
 
                     b.Navigation("Town");
+                });
+
+            modelBuilder.Entity("Knizhar.Data.Models.User", b =>
+                {
+                    b.HasOne("Knizhar.Data.Models.FavouriteBook", "FavouriteBook")
+                        .WithMany()
+                        .HasForeignKey("FavouriteBookId1");
+
+                    b.Navigation("FavouriteBook");
                 });
 
             modelBuilder.Entity("Knizhar.Data.Models.Vote", b =>
@@ -619,6 +690,11 @@ namespace Knizhar.Migrations
                     b.Navigation("Books");
                 });
 
+            modelBuilder.Entity("Knizhar.Data.Models.Book", b =>
+                {
+                    b.Navigation("FavouriteBooks");
+                });
+
             modelBuilder.Entity("Knizhar.Data.Models.Condition", b =>
                 {
                     b.Navigation("Books");
@@ -653,6 +729,8 @@ namespace Knizhar.Migrations
 
             modelBuilder.Entity("Knizhar.Data.Models.User", b =>
                 {
+                    b.Navigation("FavouriteBooks");
+
                     b.Navigation("Votes");
                 });
 #pragma warning restore 612, 618

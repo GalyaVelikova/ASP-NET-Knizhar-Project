@@ -81,7 +81,9 @@
 
         public bool Archive(int bookId);
 
-        public bool FavouriteBook(int bookId, string userId);
+        public BookDetailsModel AddFavouriteBook(int bookId, string userId);
+
+        public BookDetailsModel RemoveFavouriteBook(int bookId, string userId);
         public bool IsFavouriteBook(int bookId, string userId);
 
         public BookSearchServiceModel GetFavouriteBooks(

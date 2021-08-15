@@ -399,24 +399,8 @@
 
         }
 
-        public bool FavouriteBook(int bookId, string userId)
+        public BookDetailsModel AddFavouriteBook(int bookId, string userId)
         {
-            var book = this.data.Books.FirstOrDefault(b => b.Id == bookId);
-
-            if (book == null)
-            {
-                return false;
-            }
-
-            if (IsFavouriteBook(bookId, userId))
-            {
-                var bookToRemove = this.data.FavouriteBooks.FirstOrDefault(b => b.BookId == bookId && b.UserId == userId);
-                this.data.FavouriteBooks.Remove(bookToRemove);
-                this.data.SaveChanges();
-
-                return true;
-            }
-
             var favouriteBook = new FavouriteBook
             {
                 BookId = bookId,
@@ -424,12 +408,25 @@
             };
 
             this.data.FavouriteBooks.Add(favouriteBook);
+
             this.data.SaveChanges();
 
-            return true;
 
+            var bookDetails = Details(bookId);
+
+            return bookDetails;
         }
 
+        public BookDetailsModel RemoveFavouriteBook(int bookId, string userId)
+        {
+            var bookToRemove = this.data.FavouriteBooks.FirstOrDefault(b => b.BookId == bookId && b.UserId == userId);
+            this.data.FavouriteBooks.Remove(bookToRemove);
+            this.data.SaveChanges();
+
+            var bookDetails = Details(bookId);
+
+            return bookDetails;
+        }
         public bool IsFavouriteBook(int bookId, string userId)
             => this.data.
                FavouriteBooks
@@ -459,16 +456,16 @@
 
         private IEnumerable<BookServiceModel> GetFavouriteBooks(IQueryable<FavouriteBook> favouriteBookQuery, string imagePath)
            => favouriteBookQuery
-               .Select( fb => new BookServiceModel
+               .Select(fb => new BookServiceModel
                {
                    Id = fb.Book.Id,
                    Name = fb.Book.Name,
-                   ImagePath = imagePath,
+                   ImagePath = "/images/books/" + fb.Book.Image.Id + "." + fb.Book.Image.Extension,
                    AuthorName = fb.Book.Author.Name,
                    TheBookIsFor = fb.Book.IsForGiveAway ? "Give away" : "Exchange",
                    Price = fb.Book.Price,
                    isArchived = fb.Book.IsArchived,
-                   isPublic = fb.Book.IsPublic
+                   isPublic = fb.Book.IsPublic,
                })
                .ToList();
     }

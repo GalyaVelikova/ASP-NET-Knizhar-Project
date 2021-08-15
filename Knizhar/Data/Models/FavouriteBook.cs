@@ -2,6 +2,7 @@
 {
     public class FavouriteBook
     {
+        public int Id { get; set; }
         public int BookId { get; init; }
 
         public Book Book { get; set; }

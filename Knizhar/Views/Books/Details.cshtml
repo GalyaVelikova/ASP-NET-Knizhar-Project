@@ -84,9 +84,19 @@
 }
 else
 {
-    <form method="post">
-        <button type="submit" asp-controller="Books" asp-action="FavouriteBook" asp-route-id="@Model.Id" class="btn btn-danger">@(Model.isFavouriteBook ? "Remove from Favourites" : "Add to Favourites")</button>
-    </form>
+    if (Model.isFavouriteBook)
+    {
+        <form method="post">
+            <a asp-controller="Books" asp-action="RemoveFavouriteBook" asp-route-id="@Model.Id" class="btn btn-danger btn-sm">Remove from Favourites</a>
+        </form>
+    }
+    else
+    {
+        <form method="post">
+            <a asp-controller="Books" asp-action="AddFavouriteBook" asp-route-id="@Model.Id" class="btn btn-info btn-sm">Add to Favourites</a>
+        </form>
+    }
+
 }
 <form method="post">
     <div class="modal fade" id="modalDelete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
