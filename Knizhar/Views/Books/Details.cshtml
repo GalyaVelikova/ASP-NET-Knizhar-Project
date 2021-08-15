@@ -49,6 +49,7 @@
                 <li>ISBN:	<span itemprop="isbn" style="float:right;">@Model.Isbn</span></li>
                 <li>Language:	<a asp-controller="Books" asp-action="Filter" asp-route-languageName="@Model.LanguageName"><span itemprop="inLanguage" style="float:right;">@Model.LanguageName</span></a></li>
                 <li>Genre: <a asp-controller="Books" asp-action="Filter" asp-route-genreName="@Model.GenreName"><span itemprop="genre" style="float:right;">@Model.GenreName</span></a></li>
+                <li>Condition of the book: <span itemprop="genre" style="float:right;">@Model.ConditionName</span></li>
                 <li>The book is located in: <a asp-controller="Books" asp-action="Filter" asp-route-townName="@Model.TownName" target="_blank" style="float:right;">@Model.TownName</a></li>
                 <li>
                     The book is for
@@ -98,6 +99,14 @@ else
     }
 
 }
+@if (Model.Comment != null)
+{
+    <h4 itemprop="name" class="desc-title">Comments on the condition of the book</h4>
+    <span>@Model.Comment</span>
+}
+<h4 itemprop="name" class="desc-title">Description</h4>
+<span>@Model.Description</span>
+
 <form method="post">
     <div class="modal fade" id="modalDelete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">

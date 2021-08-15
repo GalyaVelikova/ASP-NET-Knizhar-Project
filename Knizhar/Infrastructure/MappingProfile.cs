@@ -30,6 +30,7 @@
                 .ForMember(b => b.TownName, cfg => cfg.MapFrom(b => b.Knizhar.Town.Name))
                 .ForMember(b => b.KnizharName, cfg => cfg.MapFrom(b => b.Knizhar.UserName))
                 .ForMember(b => b.ImagePath, cfg => cfg.MapFrom(b => "/images/books/" + b.Image.Id + "." + b.Image.Extension))
+                .ForMember(b => b.ConditionName, cfg => cfg.MapFrom(b => b.Condition.ConditionName))
                 .ForMember(b => b.TheBookIsFor, opt => opt.MapFrom(src => src.IsForGiveAway ? "Give away" : "Exchange"))
                 .ForMember(b => b.AverageVote, opt => opt.MapFrom(src => src.Knizhar.Votes.Count() !=0 ? src.Knizhar.Votes.Average(v => v.VoteValue) : 0)); 
         }

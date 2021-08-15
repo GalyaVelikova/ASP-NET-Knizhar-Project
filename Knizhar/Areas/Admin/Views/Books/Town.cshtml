@@ -9,7 +9,7 @@
             <input asp-for="Name" type="text" class="form-control mb-3">
             <span asp-validation-for="Name" class="small text-danger"></span>
             <button asp-area="Admin" asp-controller="Books" asp-action="AddTown" type="submit" value="Save" class="btn btn-primary">Save</button>
-            <button asp-controller="Books" asp-action="DeleteTown" type="submit" class="btn btn-danger" value="Save">Delete</button>
+            <button asp-controller="Books" asp-action="DeleteTown" type="submit" class="btn btn-danger float-right" value="Save">Delete</button>
         </div>
     </div>
 </form>
