@@ -9,6 +9,8 @@
 {
     <h2 class="text-center">You do not have any books yet.</h2>
 }
-
-<partial name="_BooksPartial" model="@Model.Books" />
-<partial name="_PagingPartial" model="@Model" />
+else
+{
+    <partial name="_BooksPartial" model="@Model.Books" />
+    <partial name="_PagingPartial" model="@Model" />
+}
