@@ -48,7 +48,7 @@
             string searchTerm = null,
             BookSorting sorting = BookSorting.Newest,
             int currentPage = 1,
-            int booksPerPage = 10,
+            int booksPerPage = int.MaxValue,
             bool publicOnly = true);
         BookDetailsModel Details(int bookId);
         IEnumerable<BookServiceModel> ByUser(string userId, string imagePath);
