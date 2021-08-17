@@ -28,7 +28,7 @@
         public DbSet<Vote> Votes { get; init; }
 
         public DbSet<FavouriteBook> FavouriteBooks { get; init; }
-
+        public DbSet<Message> Messages { get; init; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

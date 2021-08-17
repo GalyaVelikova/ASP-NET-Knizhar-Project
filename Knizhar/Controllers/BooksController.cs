@@ -352,5 +352,8 @@
 
             return View(favouriteBooks);
         }
+
+        [Authorize]
+        public IActionResult Messaging() => View();
     }
 }

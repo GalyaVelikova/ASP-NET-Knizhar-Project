@@ -8,6 +8,7 @@ namespace Knizhar
     using Knizhar.Services;
     using Knizhar.Services.Books;
     using Knizhar.Services.Knizhari;
+    using Knizhar.Services.Messages;
     using Knizhar.Services.Statistics;
     using Knizhar.Services.Votes;
     using Microsoft.AspNetCore.Builder;
@@ -47,11 +48,14 @@ namespace Knizhar
 
             services.AddAutoMapper(typeof(Startup));
             services.AddMemoryCache();
+            services.AddSignalR();
+            services.AddControllers()
+                        .AddNewtonsoftJson();
 
-            //services.AddControllersWithViews(options =>
-            //{
-            //    options.Filters.Add<AutoValidateAntiforgeryTokenAttribute>();
-            //});
+            services.AddControllersWithViews(options =>
+            {
+                options.Filters.Add<AutoValidateAntiforgeryTokenAttribute>();
+            });
 
             services.AddAntiforgery(options =>
             {
@@ -102,6 +106,7 @@ namespace Knizhar
                         });
                     endpoints.MapDefaultControllerRoute();
                     endpoints.MapRazorPages();
+                    endpoints.MapHub<MessageHub>("/message");
                 });
         }
     }

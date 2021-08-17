@@ -60,6 +60,8 @@
                     <li><div itemprop="offers" itemscope="" itemtype="http://schema.org/Offer">The Knizhar would sell it for<span class="price-desc" style="float:right;"><span itemprop="price">@Model.Price</span><span itemprop="priceCurrency" content="BGN">BGN</span></span></div></li>
                 }
             </ul>
+        </div>
+        <div class="media-body col-4 mt-3">
             <h4 itemprop="name" class="desc-title">Knizhar Information</h4>
             <ul class="desc-info-book">
                 <li>Name: <a asp-controller="Books" asp-action="Filter" asp-route-knizharName="@Model.KnizharName"><span itemprop="genre" style="float:right;">@Model.KnizharName</span></a></li>
@@ -73,10 +75,13 @@
                 <li class="fa fa-star" id="rating" data-vote="4"></li>
                 <li class="fa fa-star" id="rating" data-vote="5"></li>
             </ul>
-            <span id="averageVoteValue"> @Model.AverageVote.ToString("0.0")</span><span> average based on @Model.TotalVotes reviews.</span>
+            <div class="mb-5">
+                <span id="averageVoteValue"> @Model.AverageVote.ToString("0.0")</span><span> average based on @Model.TotalVotes reviews.</span>
+            </div>
+            <a asp-controller="Books" asp-action="Messaging" asp-route-knizharId ="@Model.KnizharId" type="button" class="btn btn-primary btn-lg btn-block">Send Message to @Model.KnizharName</a>
+        </div>
         </div>
     </div>
-</div>
 @if (ViewBag.AllowBookEdit)
 {
     <a asp-controller="Books" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-success btn-sm @(Model.isArchived ? "disabled" : string.Empty)">Edit</a>

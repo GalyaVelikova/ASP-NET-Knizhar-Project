@@ -4,14 +4,16 @@ using Knizhar.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Knizhar.Migrations
 {
     [DbContext(typeof(KnizharDbContext))]
-    partial class KnizharDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210816125321_AddedMessageTable")]
+    partial class AddedMessageTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

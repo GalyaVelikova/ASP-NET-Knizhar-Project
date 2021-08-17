@@ -1,0 +1,159 @@
+﻿@model ChatViewModel
+@using Knizhar.Data.Models
+@using Microsoft.AspNetCore.Identity
+@using Knizhar.Services.Knizhari
+
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+@inject IKnizharService Knizhari
+
+<div class="container bootstrap snippets bootdeys">
+        <div class="col-md-7 col-xs-12 col-md-offset-2">
+             Panel Chat
+            <div class="panel" id="chat">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        <i class="icon wb-chat-text" aria-hidden="true"></i> Chat
+                    </h3>
+                </div>
+                <div class="panel-body">
+                    <div class="chats">
+                        <div class="chat">
+                            <div class="chat-avatar">
+                                <a class="avatar avatar-online" data-toggle="tooltip" href="#" data-placement="right" title="" data-original-title="June Lane">
+                                    <p>SenderUserName</p>
+                                    <i></i>
+                                </a>
+                            </div>
+                            <div class="chat-body">
+                                <div class="chat-content">
+                                    <p>
+                                        @*@Model.Content*@
+                                    </p>
+                                    <time class="chat-time" datetime="2015-07-01T11:37">@*@Model.CreatedOn*@ am</time>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="chat chat-left">
+                            <div class="chat-avatar">
+                                <a class="avatar avatar-online" data-toggle="tooltip" href="#" data-placement="left" title="" data-original-title="Edward Fletcher">
+                                    <p>@*@Model.ReceiverUserName*@</p>
+                                    <i></i>
+                                </a>
+                            </div>
+                            <div class="chat-body">
+                                <div class="chat-content">
+                                    <p>Well, I am just looking around.</p>
+                                    <time class="chat-time" datetime="2015-07-01T11:39">11:39:57 am</time>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="chat">
+                            <div class="chat-avatar">
+                                <a class="avatar avatar-online" data-toggle="tooltip" href="#" data-placement="right" title="" data-original-title="June Lane">
+                                    <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="...">
+                                    <i></i>
+                                </a>
+                            </div>
+                            <div class="chat-body">
+                                <div class="chat-content">
+                                    <p>
+                                        If necessary, please ask me.
+                                    </p>
+                                    <time class="chat-time" datetime="2015-07-01T11:40">11:40:10 am</time>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-footer">
+                    <form>
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Say something">
+                            <span class="input-group-btn">
+                                <button class="btn btn-primary" type="button">Send</button>
+                            </span>
+                        </div>
+                    </form>
+                </div>
+            </div>
+             End Panel Chat
+        </div>
+    </div>
+
+@*@section Scripts {
+    <script>
+    @{var user = await this.UserManager.GetUserAsync(this.User);}
+
+        var connection =
+            new signalR.HubConnectionBuilder()
+                .withUrl("/message")
+                .build();
+
+        connection.on("RecieveMessage", function (message, profilePictureUrl) {
+            var date = new Date();
+            var messageElement = `
+                            <div class="d-flex justify-content-start mb-4">
+                                <div class="img_cont_msg">
+                                    <img src="${profilePictureUrl}" class="rounded-circle user_img_msg">
+                                </div>
+                                <div class="msg_cotainer">
+                                        <div>
+                                        ${message}
+                                        </div>
+                                    <span class="msg_time mt-2">
+${date.getHours().toLocaleString('en-US', { minimumIntegerDigits: 2, useGrouping: false })}
+:${date.getMinutes().toLocaleString('en-US', { minimumIntegerDigits: 2, useGrouping: false })}</span>
+                                </div>
+                            </div>`
+            $("div.card-body").append(messageElement);
+            $('div.card-body').scrollTop($('div.card-body')[0].scrollHeight - $('div.card-body')[0].clientHeight);
+        });
+
+        connection.on("SendMessage", function (message) {
+            var date = new Date();
+            var messageElement = `
+                            <div class="d-flex justify-content-end mb-4">
+                                <div class="msg_cotainer_send">
+                                    <div class="">
+                                        ${message}
+                                    </div>
+                                    <span class="msg_time_send mt-2">
+${date.getHours().toLocaleString('en-US', { minimumIntegerDigits: 2, useGrouping: false })}
+:${date.getMinutes().toLocaleString('en-US', { minimumIntegerDigits: 2, useGrouping: false })}</span>
+                                </div>
+                                <div class="img_cont_msg">
+                                    <p src="@user.UserName" ></p>
+                                </div>
+                            </div>`
+            $("div.card-body").append(messageElement);
+            $('div.card-body').scrollTop($('div.card-body')[0].scrollHeight - $('div.card-body')[0].clientHeight);
+            SaveMessage(message);
+        });
+
+        $(".send_btn").click(function () {
+            var message = $("textarea").val();
+            var userId = $("#userId").val();
+            var callerId = "@user.Id";
+
+            var model = {
+                message: message,
+                userId: userId,
+                callerId: callerId
+            }
+            connection.invoke("Send", model);
+            $("textarea").val("");
+            $("textarea").focus();
+        });
+
+            document.getElementsByTagName("textarea")[0]
+                .addEventListener("keydown", function (event) {
+                    if (event.keyCode === 13 && $("textarea").val().trim().length > 0) {
+                        event.preventDefault();
+                        $(".send_btn").click();
+                    }
+                });
+
+        connection.start();
+    </script>
+}*@
