@@ -41,19 +41,5 @@
               .To<BooksController>(c => c.Edit(1));
 
 
-        [Fact]
-        public void GetDeleteShouldBeRoutedCorrectly()
-            => MyRouting
-                .Configuration()
-                .ShouldMap("/Books/Delete/1")
-                .To<BooksController>(c => c.Delete(1));
-
-        [Fact]
-        public void GetArchiveShouldBeRoutedCorrectly()
-           => MyRouting
-               .Configuration()
-               .ShouldMap("/Books/Archive/1")
-               .To<BooksController>(c => c.Archive(1));
-
     }
 }
