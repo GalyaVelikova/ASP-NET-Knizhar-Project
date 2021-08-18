@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
-
-namespace Knizhar.Services.Books.Models
+﻿namespace Knizhar.Services.Books.Models
 {
+    using System.Collections.Generic;
     public class BookDetailsModel:IBookModel
     {
         public const int BooksPerPage = 5;

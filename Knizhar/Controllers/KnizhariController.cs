@@ -47,17 +47,6 @@
                 return View(knizhar);
             }
 
-            //var town = data.Towns.FirstOrDefault(t => t.Name == knizhar.Town);
-
-            //if (town == null)
-            //{
-            //    town = new Town { Name = knizhar.Town };
-
-            //    this.data.Towns.Add(town);
-
-            //    this.data.SaveChanges();
-            //}
-
             knizhari.Create(
                     knizhar.UserName, 
                     knizhar.TownId, 

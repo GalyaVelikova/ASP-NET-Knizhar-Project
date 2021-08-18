@@ -10,7 +10,6 @@
 
     [ApiController]
     [Route("api/[controller]")]
-    //[Produces("application/json")]
     public class MessageController : ControllerBase
     {
         private readonly IMessageService messagesService;

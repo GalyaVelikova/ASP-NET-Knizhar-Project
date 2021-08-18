@@ -26,7 +26,6 @@
   <ItemGroup>
     <Folder Include="Areas\Admin\Views\Categories\" />
     <Folder Include="Data\Migrations\" />
-    <Folder Include="Services\Messages\Models\" />
   </ItemGroup>
 
 </Project>

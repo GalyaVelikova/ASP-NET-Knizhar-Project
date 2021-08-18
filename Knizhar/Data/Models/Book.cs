@@ -55,10 +55,6 @@
         public bool IsArchived { get; set; }
 
         public bool IsPublic { get; set; }
-
-        //public int FavouriteBookId { get; set; }
-
-        //public FavouriteBook FavouriteBook { get; set; }
         public IList<FavouriteBook> FavouriteBooks { get; init; } = new List<FavouriteBook>();
     }
 }

@@ -60,8 +60,8 @@
                     .WithSet<Knizhar>(knizhari =>
                     {
                         knizhari.Any(k =>
-                            k.UserName == userName &&
-                            k.TownId == townId &&
+                            k.UserName == "Knizhar" &&
+                            k.TownId == 1 &&
                             k.UserId == TestUser.Identifier);
                     }))
                 .TempData(tempdata => tempdata

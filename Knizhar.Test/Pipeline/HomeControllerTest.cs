@@ -10,24 +10,7 @@
 
     public class HomeControllerTest
     {
-        //[Fact]
-        //public void IndexShouldReturnViewWithCorrectModelAndData()
-        // => MyMvc
-        //    .Pipeline()
-        //    .ShouldMap("/")
-        //    .To<HomeController>(c => c.Index(bookmodel))
-        //    .Which(controller => controller
-        //    .WithData(TenPublicBooks()))
-        //    .ShouldHave()
-        //    .MemoryCache(cache => cache
-        //        .ContainingEntryWithKey(LatestBooksCacheKey)
-        //        .ContainingEntryWithKey(TotalStatisticsCacheKey))
-        //    .AndAlso()
-        //    .ShouldReturn()
-        //    .View(view => view
-        //        .WithModelOfType<IEnumerable<BookServiceModel>>()
-        //        .Passing(m => m.Should().HaveCount(3)));
-
+      
         [Fact]
         public void ErrorShouldReturnView()
             => MyMvc

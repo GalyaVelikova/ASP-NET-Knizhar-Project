@@ -10,11 +10,6 @@
 
     public static class Books
     {
-        public static IEnumerable<Book> TenPublicBooks
-            => Enumerable.Range(0, 10).Select(i => new Book
-            {
-                IsPublic = true
-            });
 
         public static List<Knizhar> GetKnizhar(string userName, int townId, int count, string userId, int knizharId)
             => Enumerable

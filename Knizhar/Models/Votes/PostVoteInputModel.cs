@@ -7,6 +7,6 @@
         public int KnizharId { get; init; }
 
         [Range(VoteMinValue, VoteMaxValue)]
-        public byte Value { get; init; }
+        public byte Value { get; set; }
     }
 }

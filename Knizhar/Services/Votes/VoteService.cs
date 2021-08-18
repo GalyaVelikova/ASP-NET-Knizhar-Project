@@ -38,5 +38,6 @@
                     .Votes
                     .Where(v => v.KnizharId == knizharId)
                     .Average(v => v.VoteValue);
+
     }
 }

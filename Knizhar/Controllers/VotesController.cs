@@ -28,7 +28,7 @@
 
             var averageVote = this.votes.GetAverageVotes(voteInput.KnizharId);
 
-            return new PostVoteResponseModel{AverageVote = averageVote};
+            return new PostVoteResponseModel { AverageVote = averageVote };
         }
     }
 }

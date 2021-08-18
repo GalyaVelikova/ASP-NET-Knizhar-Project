@@ -2,7 +2,6 @@
 {
     using Knizhar.Data;
     using Knizhar.Data.Models;
-    using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.DependencyInjection;
     using System;
     using System.Linq;
