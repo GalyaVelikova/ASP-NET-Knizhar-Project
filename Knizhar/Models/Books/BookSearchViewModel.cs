@@ -10,6 +10,9 @@
         public int CurrentPage { get; init; } = 1;
 
         public int TotalBooks { get; set; }
+
+        public string Knizhar { get; set; }
+
         public string Genre { get; init; }
         public IEnumerable<string> Genres { get; set; }
 
@@ -25,6 +28,10 @@
         public BookSorting Sorting { get; init; }
 
         public string ImagePath { get; set; }
+
+        public string Filter { get; set; }
+
+        public string Author { get; set; }
 
         public IEnumerable<BookServiceModel> Books { get; set; }
     }

@@ -32,7 +32,15 @@
         public IActionResult All(BookSearchViewModel search)
         {
             var books = this.books.All(
-                 search.ImagePath = $"{this.environment.WebRootPath}/images",
+                search.ImagePath = $"{this.environment.WebRootPath}/images",
+                search.Genre,
+                search.Town,
+                search.Language,
+                search.SearchTerm,
+                search.Knizhar,
+                search.Sorting,
+                search.CurrentPage,
+                BookSearchViewModel.BooksPerPage,
                  publicOnly: false);
 
             search.TotalBooks = books.TotalBooks;

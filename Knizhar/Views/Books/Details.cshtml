@@ -35,8 +35,8 @@
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
-        <li class="breadcrumb-item"><a asp-controller="Books" asp-action="Filter" asp-route-authorName="@Model.AuthorName">@Model.AuthorName</a></li>
-        <li class="breadcrumb-item active" aria-current="page"><a asp-action="Filter" asp-route-genreName="@Model.GenreName">@Model.GenreName</a></li>
+        <li class="breadcrumb-item"><a asp-controller="Books" asp-action="Filter" asp-route-filter="@Model.AuthorName">@Model.AuthorName</a></li>
+        <li class="breadcrumb-item active" aria-current="page"><a asp-action="Filter" asp-route-filter="@Model.GenreName">@Model.GenreName</a></li>
     </ol>
 </nav>
 <div>
@@ -47,10 +47,10 @@
             <ul class="desc-info-book">
                 <li>Author: <span itemprop="author" style="float:right;" itemscope="" itemtype="http://schema.org/Person"><a asp-controller="Books" asp-action="Filter" asp-route-authorName="@Model.AuthorName"><span itemprop="name">@Model.AuthorName</span></a></span></li>
                 <li>ISBN:	<span itemprop="isbn" style="float:right;">@Model.Isbn</span></li>
-                <li>Language:	<a asp-controller="Books" asp-action="Filter" asp-route-languageName="@Model.LanguageName"><span itemprop="inLanguage" style="float:right;">@Model.LanguageName</span></a></li>
-                <li>Genre: <a asp-controller="Books" asp-action="Filter" asp-route-genreName="@Model.GenreName"><span itemprop="genre" style="float:right;">@Model.GenreName</span></a></li>
+                <li>Language:	<a asp-controller="Books" asp-action="Filter" asp-route-filter="@Model.LanguageName"><span itemprop="inLanguage" style="float:right;">@Model.LanguageName</span></a></li>
+                <li>Genre: <a asp-controller="Books" asp-action="Filter" asp-route-filter="@Model.GenreName"><span itemprop="genre" style="float:right;">@Model.GenreName</span></a></li>
                 <li>Condition of the book: <span itemprop="genre" style="float:right;">@Model.ConditionName</span></li>
-                <li>The book is located in: <a asp-controller="Books" asp-action="Filter" asp-route-townName="@Model.TownName" target="_blank" style="float:right;">@Model.TownName</a></li>
+                <li>The book is located in: <a asp-controller="Books" asp-action="Filter"  asp-route-filter="@Model.TownName" target="_blank" style="float:right;">@Model.TownName</a></li>
                 <li>
                     The book is for
                     <span class="price-free" style="float:right;">@Model.TheBookIsFor</span>
@@ -64,8 +64,8 @@
         <div class="media-body col-4 mt-3">
             <h4 itemprop="name" class="desc-title">Knizhar Information</h4>
             <ul class="desc-info-book">
-                <li>Name: <a asp-controller="Books" asp-action="Filter" asp-route-knizharName="@Model.KnizharName"><span itemprop="genre" style="float:right;">@Model.KnizharName</span></a></li>
-                <li>Town: <a asp-controller="Books" asp-action="Filter" asp-route-townName="@Model.TownName" target="_blank" style="float:right;">@Model.TownName</a></li>
+                <li>Name: <a asp-controller="Books" asp-action="Filter"  asp-route-filter="@Model.KnizharName"><span itemprop="genre" style="float:right;">@Model.KnizharName</span></a></li>
+                <li>Town: <a asp-controller="Books" asp-action="Filter"  asp-route-filter="@Model.TownName" target="_blank" style="float:right;">@Model.TownName</a></li>
             </ul>
             <h6 class="heading">User Rating</h6>
             <ul>
@@ -84,13 +84,13 @@
     </div>
 @if (ViewBag.AllowBookEdit)
 {
-    <a asp-controller="Books" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-success btn-sm @(Model.isArchived ? "disabled" : string.Empty)">Edit</a>
+    <a asp-controller="Books" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-success btn-sm @(Model.IsArchived ? "disabled" : string.Empty)">Edit</a>
     <a data-toggle="modal" data-target="#modalDelete" asp-controller="Books" asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-warning btn-sm">Delete</a>
-    <a data-toggle="modal" data-target="#modalArchive" asp-controller="Books" asp-action="Archive" asp-route-id="@Model.Id" class="btn btn-secondary btn-sm @(Model.isArchived ? "disabled" : string.Empty)">@(Model.isArchived ? "Archived" : "Archive")</a>
+    <a data-toggle="modal" data-target="#modalArchive" asp-controller="Books" asp-action="Archive" asp-route-id="@Model.Id" class="btn btn-secondary btn-sm @(Model.IsArchived ? "disabled" : string.Empty)">@(Model.IsArchived ? "Archived" : "Archive")</a>
 }
 else
 {
-    if (Model.isFavouriteBook)
+    if (Model.IsFavouriteBook)
     {
         <form method="post">
             <a asp-controller="Books" asp-action="RemoveFavouriteBook" asp-route-id="@Model.Id" class="btn btn-danger btn-sm">Remove from Favourites</a>

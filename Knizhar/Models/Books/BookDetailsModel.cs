@@ -42,9 +42,9 @@ namespace Knizhar.Services.Books.Models
 
         public int TotalVotes { get; set; }
 
-        public bool isArchived { get; set; }
+        public bool IsArchived { get; set; }
 
-        public bool isFavouriteBook { get; set; }
+        public bool IsFavouriteBook { get; set; }
         public IEnumerable<BookServiceModel> Books { get; set; }
     }
 

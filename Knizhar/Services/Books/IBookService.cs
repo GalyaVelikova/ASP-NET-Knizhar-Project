@@ -46,23 +46,24 @@
             string town = null,
             string language = null,
             string searchTerm = null,
+            string knizhar = null,
             BookSorting sorting = BookSorting.Newest,
             int currentPage = 1,
-            int booksPerPage = int.MaxValue,
+            int booksPerPage = 5,
             bool publicOnly = true);
         BookDetailsModel Details(int bookId);
         IEnumerable<BookServiceModel> ByUser(string userId, string imagePath);
 
         BookSearchServiceModel MyBooks(
-             int currentPage,
-             int booksPerPage,
              string userId,
-             string imagePath);
-        BookSearchServiceModel Filter(
-             BookDetailsModel book,
-             int currentPage,
-             int booksPerPage,
-             string imagePath);
+             string imagePath,
+             int currentPage = 1,
+             int booksPerPage = 5);
+        BookSearchViewModel Filter(
+             string imagePath,
+             string filter,
+             int currentPage = 1,
+             int booksPerPage = 5);
         IEnumerable<BookGenreServiceModel> AllGenres();
         IEnumerable<BookLanguageServiceModel> AllLanguages();
         IEnumerable<BookConditionServiceModel> AllConditions();

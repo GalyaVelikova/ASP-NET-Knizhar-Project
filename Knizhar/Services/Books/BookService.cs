@@ -31,10 +31,11 @@
             string genre = null,
             string town = null,
             string language = null,
+            string knizhar = null,
             string searchTerm = null,
             BookSorting sorting = BookSorting.Newest,
             int currentPage = 1,
-            int booksPerPage = 8,
+            int booksPerPage = 5,
             bool publicOnly = true)
         {
             var booksQuery = this.data.Books
@@ -44,6 +45,11 @@
             if (!string.IsNullOrWhiteSpace(genre))
             {
                 booksQuery = booksQuery.Where(b => b.Genre.Name == genre);
+            }
+
+            if (!string.IsNullOrWhiteSpace(knizhar))
+            {
+                booksQuery = booksQuery.Where(b => b.Knizhar.UserName == knizhar);
             }
 
             if (!string.IsNullOrWhiteSpace(town))
@@ -83,7 +89,7 @@
 
             var books = GetBooks(booksQuery
                 .Skip((currentPage - 1) * booksPerPage)
-                .Take(booksPerPage), imagePath);
+                .Take(booksPerPage));
 
             return new BookSearchServiceModel
             {
@@ -95,20 +101,19 @@
 
 
         public BookSearchServiceModel MyBooks(
-             int currentPage,
-             int booksPerPage,
              string userId,
-             string imagePath)
+             string imagePath,
+             int currentPage = 1,
+             int booksPerPage = 5)
         {
+            var booksByUserQuery = this.data.Books.Where(b => b.Knizhar.UserId == userId).AsQueryable();
 
-            var booksByUser = GetBooks(this.data
-               .Books
-               .Where(b => b.Knizhar.UserId == userId)
+            var totalBooks = booksByUserQuery.Count();
+
+            var booksByUser = GetBooks(
+                booksByUserQuery
                .Skip((currentPage - 1) * booksPerPage)
-               .Take(booksPerPage),
-               imagePath);
-
-            var totalBooks = booksByUser.Count();
+               .Take(booksPerPage));
 
             return new BookSearchServiceModel
             {
@@ -122,8 +127,7 @@
 
             var booksByUser = GetBooks(this.data
                 .Books
-                .Where(b => b.Knizhar.UserId == userId),
-                imagePath);
+                .Where(b => b.Knizhar.UserId == userId));
 
             return booksByUser;
         }
@@ -131,7 +135,7 @@
             => this.data
                 .Books
                 .Any(b => b.Id == bookId && b.KnizharId == knizharId);
-        private IEnumerable<BookServiceModel> GetBooks(IQueryable<Book> bookQuery, string imagePath)
+        private IEnumerable<BookServiceModel> GetBooks(IQueryable<Book> bookQuery)
             => bookQuery
                 .ProjectTo<BookServiceModel>(this.mapper)
                 .ToList();
@@ -169,70 +173,60 @@
                   .Books
                   .Where(b => b.Id == id)
                   .ProjectTo<BookDetailsModel>(this.mapper)
-                  //.Select(b => new BookDetailsServiceModel
-                  //{
-                  //    Name = b.Name,
-                  //    ImageUrl = b.ImageUrl,
-                  //    AuthorName = b.Author.Name,
-                  //    Isbn = b.Isbn,
-                  //    Language = b.Language.LanguageName,
-                  //    Genre = b.Genre.Name,
-                  //    Description = b.Description,
-                  //    Condition = b.Condition.ConditionName,
-                  //    Comment = b.Comment,
-                  //    IsForGiveAway = b.IsForGiveAway,
-                  //    Price = b.Price == 0 ? 00.00m : b.Price,
-                  //    KnizharId = b.KnizharId,
-                  //    KnizharName = b.Knizhar.UserName,
-                  //    UserId = b.Knizhar.UserId
-
-                  //})
                   .FirstOrDefault();
 
-        public BookSearchServiceModel Filter(
-             BookDetailsModel book,
-             int currentPage,
-             int booksPerPage,
-             string imagePath)
+        public BookSearchViewModel Filter(
+             string imagePath,
+             string filter,
+             int currentPage = 1,
+             int booksPerPage = 5)
         {
             var booksQuery = this.data.Books.Where(b => !b.IsArchived).AsQueryable();
+            var searchFilter = string.Empty;
 
-            if (this.data.Genres.Any(g => g.Name == book.GenreName))
+            if (this.data.Genres.Any(g => g.Name == filter))
             {
-                booksQuery = booksQuery.Where(b => b.Genre.Name == book.GenreName);
+                booksQuery = booksQuery.Where(b => b.Genre.Name == filter);
+                searchFilter = filter;
             }
 
-            if (this.data.Towns.Any(t => t.Name == book.TownName))
+            if (this.data.Towns.Any(t => t.Name == filter))
             {
-                booksQuery = booksQuery.Where(b => b.Knizhar.Town.Name == book.TownName);
+                booksQuery = booksQuery.Where(b => b.Knizhar.Town.Name == filter);
+                searchFilter = filter;
             }
 
-            if (this.data.Languages.Any(l => l.LanguageName == book.LanguageName))
+            if (this.data.Languages.Any(l => l.LanguageName == filter))
             {
-                booksQuery = booksQuery.Where(b => b.Language.LanguageName == book.LanguageName);
+                booksQuery = booksQuery.Where(b => b.Language.LanguageName == filter);
+                searchFilter = filter;
             }
 
-            if (this.data.Authors.Any(a => a.Name == book.AuthorName))
+            if (this.data.Authors.Any(a => a.Name == filter))
             {
-                booksQuery = booksQuery.Where(b => b.Author.Name == book.AuthorName);
+                booksQuery = booksQuery.Where(b => b.Author.Name == filter);
+                searchFilter = filter;
             }
 
-            if (this.data.Knizhari.Any(k => k.UserName == book.KnizharName))
+            if (this.data.Knizhari.Any(k => k.UserName == filter))
             {
-                booksQuery = booksQuery.Where(b => b.Knizhar.UserName == book.KnizharName);
+                booksQuery = booksQuery.Where(b => b.Knizhar.UserName == filter);
+                searchFilter = filter;
             }
+
 
             var totalBooks = booksQuery.Count();
 
             var books = GetBooks(booksQuery
                 .Skip((currentPage - 1) * booksPerPage)
-                .Take(booksPerPage), imagePath);
+                .Take(booksPerPage));
 
-            return new BookSearchServiceModel
+            return new BookSearchViewModel
             {
                 TotalBooks = totalBooks,
                 CurrentPage = currentPage,
                 Books = books,
+                Filter = searchFilter
             };
         }
         public bool GenreExists(int genreId)
@@ -257,7 +251,20 @@
             return authorData;
         }
 
-        public int Create(string isbn, string name, int genreId, int languageId, int conditionId, IFormFile image, string description, int author, string comment, bool isForGiveAway, decimal price, int knizharId, string imagePath)
+        public int Create(
+            string isbn, 
+            string name, 
+            int genreId, 
+            int languageId, 
+            int conditionId, 
+            IFormFile image, 
+            string description, 
+            int author, 
+            string comment, 
+            bool isForGiveAway, 
+            decimal price, 
+            int knizharId, 
+            string imagePath)
         {
 
             Directory.CreateDirectory($"{imagePath}/books/");
@@ -454,7 +461,7 @@
             };
         }
 
-        private IEnumerable<BookServiceModel> GetFavouriteBooks(IQueryable<FavouriteBook> favouriteBookQuery, string imagePath)
+        private static IEnumerable<BookServiceModel> GetFavouriteBooks(IQueryable<FavouriteBook> favouriteBookQuery, string imagePath)
            => favouriteBookQuery
                .Select(fb => new BookServiceModel
                {

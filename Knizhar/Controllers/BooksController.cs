@@ -111,6 +111,7 @@
                 search.Genre,
                 search.Town,
                 search.Language,
+                search.Knizhar,
                 search.SearchTerm,
                 search.Sorting,
                 search.CurrentPage,
@@ -135,10 +136,10 @@
             string imagePath = $"{this.environment.WebRootPath}/images";
 
             var myBooks = this.books.MyBooks(
+                this.User.Id(),
+                imagePath,
                 bookModel.CurrentPage,
-                BookSearchViewModel.BooksPerPage,
-                this.User.Id(), 
-                imagePath);
+                BookSearchViewModel.BooksPerPage);
 
             return View(myBooks);
         }
@@ -148,7 +149,7 @@
             var userId = this.User.Id();
 
             var book = this.books.Details(id);
-            book.isFavouriteBook = this.books.IsFavouriteBook(id, userId);
+            book.IsFavouriteBook = this.books.IsFavouriteBook(id, userId);
 
             if (information != book.GetInformation())
             {
@@ -157,17 +158,17 @@
             return View(book);
         }
 
-        public IActionResult Filter(BookDetailsModel book)
+        public IActionResult Filter(BookDetailsModel book, string filter)
         {
             string imagePath = $"{this.environment.WebRootPath}/images";
             var currentPage = book.CurrentPage;
             var booksPerPage = BookDetailsModel.BooksPerPage;
 
             var filterResult = this.books.Filter(
-                book,
+                imagePath,
+                filter,
                 currentPage,
-                booksPerPage,
-                imagePath);
+                booksPerPage);
 
             return View(filterResult);
         }
